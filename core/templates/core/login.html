@@ -1,0 +1,392 @@
+{% extends 'base.html' %}
+
+{% block title %}Login — SMS{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    .login-wrapper {
+        font-family: 'Outfit', sans-serif;
+        min-height: 92vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1E1E2D 0%, #2D1B69 50%, #1E1E2D 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        width: 400px;
+        height: 400px;
+        background: rgba(108, 99, 255, 0.12);
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: float 7s ease-in-out infinite;
+    }
+
+    .login-wrapper::after {
+        content: '';
+        position: absolute;
+        bottom: -15%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: rgba(245, 197, 66, 0.08);
+        border-radius: 50%;
+        filter: blur(100px);
+        animation: float 9s ease-in-out infinite 2s;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(20px, -30px);
+        }
+    }
+
+    .login-card {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 880px;
+        display: flex;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+        margin: 20px;
+        animation: slideUp 0.6s ease forwards;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Left Panel */
+    .login-left {
+        width: 45%;
+        background: linear-gradient(135deg, rgba(108, 99, 255, 0.3), rgba(139, 92, 246, 0.3));
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 32px;
+        text-align: center;
+        color: white;
+    }
+
+    .login-icon-container {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s;
+    }
+
+    .login-icon-container i {
+        font-size: 36px;
+    }
+
+    .login-left h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .login-left p {
+        font-size: 14px;
+        opacity: 0.85;
+        line-height: 1.6;
+        max-width: 250px;
+    }
+
+    /* Right Panel */
+    .login-right {
+        width: 55%;
+        background: white;
+        padding: 48px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .login-right .form-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1E1E2D;
+        margin-bottom: 6px;
+    }
+
+    .login-right .form-subtitle {
+        font-size: 14px;
+        color: #6B7280;
+        margin-bottom: 32px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group .form-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9CA3AF;
+        font-size: 15px;
+        transition: color 0.2s;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 14px 16px 14px 42px;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        color: #1E1E2D;
+        transition: all 0.2s;
+        outline: none;
+    }
+
+    .form-group input::placeholder {
+        color: #9CA3AF;
+    }
+
+    .form-group input:focus {
+        border-color: #6C63FF;
+        box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+    }
+
+    .form-group input:focus+.form-icon,
+    .form-group:focus-within .form-icon {
+        color: #6C63FF;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #6C63FF, #8B5CF6);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+        margin-top: 8px;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+    }
+
+    .forgot-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .forgot-link a {
+        font-size: 13px;
+        color: #6C63FF;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .forgot-link a:hover {
+        color: #4F46E5;
+    }
+
+    .alert-box {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .alert-error {
+        background: #FEF2F2;
+        color: #991B1B;
+        border: 1px solid #FECACA;
+    }
+
+    .alert-success {
+        background: #F0FDF4;
+        color: #166534;
+        border: 1px solid #BBF7D0;
+    }
+
+    @keyframes shake {
+
+        10%,
+        90% {
+            transform: translate3d(-1px, 0, 0);
+        }
+
+        20%,
+        80% {
+            transform: translate3d(2px, 0, 0);
+        }
+
+        30%,
+        50%,
+        70% {
+            transform: translate3d(-3px, 0, 0);
+        }
+
+        40%,
+        60% {
+            transform: translate3d(3px, 0, 0);
+        }
+    }
+
+    .animate-shake {
+        animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+    }
+
+    @media (max-width: 768px) {
+        .login-left {
+            display: none;
+        }
+
+        .login-right {
+            width: 100%;
+            padding: 36px 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block layout %}
+{% block content %}
+<div class="login-wrapper">
+    <div class="login-card">
+        <!-- Left Side: Dynamic Illustration -->
+        <div class="login-left">
+            <div class="login-icon-container" id="role-icon-container" style="background: rgba(255,255,255,0.15);">
+                <i id="role-icon" class="fas fa-school"></i>
+            </div>
+            <h2>Welcome Back!</h2>
+            <p>Secure access to the School Management System. Please verify yourself to continue.</p>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="login-right">
+            <div class="form-title" id="login-title">Portal Login</div>
+            <div class="form-subtitle">Enter your credentials below</div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert-box {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                    <i
+                        class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+                    <div>
+                        <strong>{{ message.tags|title }}</strong><br>
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if form.errors %}
+                <div class="alert-box alert-error animate-shake">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>
+                        <strong>Error</strong><br>
+                        Invalid username or password.
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <i class="fas fa-user form-icon"></i>
+                    <input type="text" name="username" required placeholder="Username / ID">
+                </div>
+
+                <div class="form-group">
+                    <i class="fas fa-lock form-icon"></i>
+                    <input type="password" name="password" required placeholder="Password">
+                </div>
+
+                <button type="submit" class="login-btn">Sign In</button>
+
+                <div class="forgot-link">
+                    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        const titleElement = document.getElementById('login-title');
+        const iconElement = document.getElementById('role-icon');
+        const iconContainer = document.getElementById('role-icon-container');
+
+        if (role) {
+            const formattedRole = role.charAt(0).toUpperCase() + role.slice(1);
+            titleElement.textContent = `${formattedRole} Login`;
+
+            switch (role) {
+                case 'student':
+                    iconElement.className = 'fas fa-user-graduate';
+                    iconElement.style.color = '#60A5FA';
+                    iconContainer.style.background = 'rgba(96,165,250,0.2)';
+                    break;
+                case 'teacher':
+                    iconElement.className = 'fas fa-chalkboard-teacher';
+                    iconElement.style.color = '#34D399';
+                    iconContainer.style.background = 'rgba(52,211,153,0.2)';
+                    break;
+                case 'driver':
+                    iconElement.className = 'fas fa-bus';
+                    iconElement.style.color = '#F5C542';
+                    iconContainer.style.background = 'rgba(245,197,66,0.2)';
+                    break;
+                case 'admin':
+                    iconElement.className = 'fas fa-user-shield';
+                    iconElement.style.color = '#F472B6';
+                    iconContainer.style.background = 'rgba(244,114,182,0.2)';
+                    break;
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

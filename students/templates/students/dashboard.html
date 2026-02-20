@@ -1,0 +1,237 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Student Portal — Dashboard{% endblock %}
+
+{% block header_title %}Student Dashboard{% endblock %}
+{% block user_role %}Student{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'students:dashboard' %}" class="nav-item active">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'students:attendance' %}" class="nav-item">
+    <i class="fas fa-calendar-check"></i> Attendance
+</a>
+<a href="{% url 'students:grades' %}" class="nav-item">
+    <i class="fas fa-award"></i> Grades
+</a>
+<a href="{% url 'students:fees' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Fees
+</a>
+<a href="{% url 'students:homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Homework
+    {% if homeworks.count > 0 %}
+    <span class="nav-badge">{{ homeworks.count }}</span>
+    {% endif %}
+</a>
+<a href="{% url 'students:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> Timetable
+</a>
+{% endblock %}
+
+
+
+{% block dashboard_content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner animate-in">
+    <div class="welcome-text">
+        <h2>Welcome back, {{ student.user.first_name }}! 👋</h2>
+        <p>Class {{ student.current_class }} · Admission No: {{ student.admission_number }} — Here's your academic
+            overview.</p>
+    </div>
+    <div class="welcome-illustration">
+        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Desk -->
+            <rect x="40" y="105" width="120" height="6" rx="3" fill="#DDD6FE" />
+            <rect x="55" y="111" width="6" height="35" rx="2" fill="#C4B5FD" />
+            <rect x="139" y="111" width="6" height="35" rx="2" fill="#C4B5FD" />
+            <!-- Books stack -->
+            <rect x="50" y="85" width="35" height="8" rx="2" fill="#6C63FF" />
+            <rect x="53" y="77" width="30" height="8" rx="2" fill="#8B5CF6" />
+            <rect x="56" y="69" width="25" height="8" rx="2" fill="#A78BFA" />
+            <!-- Laptop -->
+            <rect x="95" y="78" width="45" height="28" rx="4" fill="#6C63FF" />
+            <rect x="99" y="82" width="37" height="20" rx="2" fill="#A5B4FC" />
+            <rect x="88" y="105" width="60" height="3" rx="1.5" fill="#8B5CF6" />
+            <!-- Student figure -->
+            <circle cx="155" cy="50" r="12" fill="#FDE68A" />
+            <rect x="149" y="62" width="12" height="14" rx="4" fill="#FDE68A" />
+            <path d="M142 105 Q155 72 168 105" fill="#34D399" />
+            <!-- Graduation cap -->
+            <polygon points="155,38 140,44 155,50 170,44" fill="#1E1E2D" />
+            <rect x="153" y="32" width="4" height="8" fill="#1E1E2D" />
+            <!-- Decorative elements -->
+            <circle cx="45" cy="55" r="3" fill="#FDE68A" opacity="0.6" />
+            <circle cx="175" cy="70" r="4" fill="#A78BFA" opacity="0.4" />
+            <circle cx="120" cy="45" r="2.5" fill="#34D399" opacity="0.5" />
+        </svg>
+    </div>
+</div>
+
+<!-- Stats Overview -->
+<div class="stats-section animate-in animate-delay-1">
+    <div class="stats-section-title">Overview</div>
+    <div class="stats-grid">
+        <a href="{% url 'students:attendance' %}" class="stat-card gradient-yellow" style="text-decoration:none">
+            <div class="stat-icon yellow">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{{ attendance_percentage }}%</div>
+                <div class="stat-label">Attendance</div>
+            </div>
+        </a>
+        <a href="{% url 'students:fees' %}" class="stat-card gradient-purple" style="text-decoration:none">
+            <div class="stat-icon purple">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{% if fee_balance > 0 %}${{ fee_balance }}{% else %}<span
+                        style="color:#059669;">Paid</span>{% endif %}</div>
+                <div class="stat-label">Fee Balance</div>
+            </div>
+        </a>
+        <a href="{% url 'students:grades' %}" class="stat-card gradient-pink" style="text-decoration:none">
+            <div class="stat-icon pink">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{% if latest_grade %}{{ latest_grade.grade }}{% else %}—{% endif %}</div>
+                <div class="stat-label">Latest Grade</div>
+            </div>
+        </a>
+        <a href="{% url 'students:homework' %}" class="stat-card gradient-green" style="text-decoration:none">
+            <div class="stat-icon green">
+                <i class="fas fa-pen-fancy"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{{ homeworks.count }}</div>
+                <div class="stat-label">Pending Homework</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="content-grid animate-in animate-delay-2">
+
+    <!-- LEFT: Quick Actions + Homework -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Quick Actions -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-rocket" style="color: var(--primary); margin-right: 8px;"></i>Quick Actions</h3>
+            </div>
+            <div class="quick-action-grid">
+                <a href="{% url 'students:attendance' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <span>Attendance</span>
+                </a>
+                <a href="{% url 'students:grades' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <span>Report Card</span>
+                </a>
+                <a href="{% url 'students:fees' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #D1FAE5; color: #059669;">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <span>Pay Fees</span>
+                </a>
+                <a href="{% url 'students:homework' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #FEF3C7; color: #D97706;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <span>Homework</span>
+                </a>
+                <a href="{% url 'students:timetable' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #FCE7F3; color: #DB2777;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span>Timetable</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Upcoming Homework -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-tasks" style="color: var(--accent-yellow); margin-right: 8px;"></i>Upcoming
+                    Homework</h3>
+                <a href="{% url 'students:homework' %}" class="header-action">View All →</a>
+            </div>
+            <div class="content-card-body">
+                {% if homeworks %}
+                {% for task in homeworks %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #FEF3C7; color: #D97706;">
+                        {{ task.subject.name|slice:":1" }}
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ task.title }}</h4>
+                        <p>{{ task.subject.name }}</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-pink">Due: {{ task.due_date|date:"M d" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-check"></i></div>
+                    <p>No pending homework! Enjoy your free time. 🎉</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Notice Board -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Announcements -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bullhorn" style="color: var(--accent-pink); margin-right: 8px;"></i>Notice Board
+                </h3>
+            </div>
+            <div class="content-card-body">
+                {% if announcements %}
+                {% for announcement in announcements %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ announcement.title }}</h4>
+                        <p>{{ announcement.content|truncatewords:15 }}</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-blue">{{ announcement.date_posted|date:"M d" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-bell-slash"></i></div>
+                    <p>No new notices</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Academic Info Card -->
+        <div class="info-card" style="background: linear-gradient(135deg, #34D399, #059669);">
+            <h4><i class="fas fa-graduation-cap" style="margin-right: 8px;"></i>Academic Progress</h4>
+            <p>Track your grades, attendance and exam performance all in one place.</p>
+            <a href="{% url 'students:grades' %}" class="info-card-btn" style="color: #059669;">View Report Card</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

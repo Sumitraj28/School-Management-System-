@@ -1,0 +1,90 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Assign Homework — SMS{% endblock %}
+
+{% block header_title %}Assign Homework{% endblock %}
+{% block user_role %}Staff{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'staff:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'staff:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> My Timetable
+</a>
+<a href="{% url 'staff:select_attendance_class' %}" class="nav-item">
+    <i class="fas fa-clipboard-check"></i> Take Attendance
+</a>
+<a href="{% url 'staff:assign_homework' %}" class="nav-item active">
+    <i class="fas fa-book-open"></i> Assign Homework
+</a>
+<a href="{% url 'staff:select_exam' %}" class="nav-item">
+    <i class="fas fa-pen-fancy"></i> Enter Marks
+</a>
+<div class="nav-label">Personal</div>
+<a href="{% url 'staff:apply_leave' %}" class="nav-item">
+    <i class="fas fa-calendar-minus"></i> Apply Leave
+</a>
+<a href="{% url 'staff:view_salary' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Salary Slips
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in" style="max-width: 700px;">
+    <div class="content-card-header">
+        <h3><i class="fas fa-book-open" style="color: var(--accent-yellow); margin-right: 8px;"></i>Assign Homework</h3>
+    </div>
+    <div class="content-card-body">
+        <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            {% csrf_token %}
+            <input type="hidden" name="assigned_date" value="{{ today|date:'Y-m-d' }}">
+
+            <div>
+                <label class="form-label">Task Title</label>
+                <input type="text" name="title" id="title" required class="form-input"
+                    placeholder="E.g. Chapter 5 Review">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                    <label class="form-label">Select Class</label>
+                    <select name="class_id" id="class_id" required class="form-input">
+                        <option value="" disabled selected>Choose a Class</option>
+                        {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.name }} - {{ class.section }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Select Subject</label>
+                    <select name="subject_id" id="subject_id" required class="form-input">
+                        <option value="" disabled selected>Choose a Subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Instructions / Description</label>
+                <textarea name="description" id="description" rows="4" required class="form-input"
+                    placeholder="Enter detailed instructions here..." style="resize: vertical;"></textarea>
+            </div>
+
+            <div>
+                <label class="form-label">Due Date</label>
+                <input type="date" name="due_date" id="due_date" required min="{{ today|date:'Y-m-d' }}"
+                    class="form-input">
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; padding-top: 8px;">
+                <button type="submit" class="sidebar-create-btn" style="display: inline-flex; gap: 8px;">
+                    <i class="fas fa-paper-plane"></i> Publish Assignment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

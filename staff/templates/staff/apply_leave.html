@@ -1,0 +1,68 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Apply Leave — SMS{% endblock %}
+
+{% block header_title %}Apply Leave{% endblock %}
+{% block user_role %}Staff{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'staff:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'staff:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> My Timetable
+</a>
+<a href="{% url 'staff:select_attendance_class' %}" class="nav-item">
+    <i class="fas fa-clipboard-check"></i> Take Attendance
+</a>
+<a href="{% url 'staff:assign_homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Assign Homework
+</a>
+<a href="{% url 'staff:select_exam' %}" class="nav-item">
+    <i class="fas fa-pen-fancy"></i> Enter Marks
+</a>
+<div class="nav-label">Personal</div>
+<a href="{% url 'staff:apply_leave' %}" class="nav-item active">
+    <i class="fas fa-calendar-minus"></i> Apply Leave
+</a>
+<a href="{% url 'staff:view_salary' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Salary Slips
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in" style="max-width: 560px;">
+    <div class="content-card-header">
+        <h3><i class="fas fa-calendar-minus" style="color: var(--accent-pink); margin-right: 8px;"></i>Apply for Leave
+        </h3>
+    </div>
+    <div class="content-card-body">
+        <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            {% csrf_token %}
+
+            <div>
+                <label class="form-label">Start Date</label>
+                <input type="date" name="start_date" required class="form-input">
+            </div>
+
+            <div>
+                <label class="form-label">End Date</label>
+                <input type="date" name="end_date" required class="form-input">
+            </div>
+
+            <div>
+                <label class="form-label">Reason</label>
+                <textarea name="reason" rows="4" required class="form-input" placeholder="Enter reason for leave..."
+                    style="resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; padding-top: 8px;">
+                <button type="submit" class="sidebar-create-btn"
+                    style="display: inline-flex; gap: 8px; background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <i class="fas fa-paper-plane"></i> Submit Application
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

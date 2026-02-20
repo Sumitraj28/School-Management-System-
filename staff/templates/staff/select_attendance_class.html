@@ -1,0 +1,80 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Select Class — SMS{% endblock %}
+
+{% block header_title %}Select Attendance Class{% endblock %}
+{% block user_role %}Staff{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'staff:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'staff:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> My Timetable
+</a>
+<a href="{% url 'staff:select_attendance_class' %}" class="nav-item active">
+    <i class="fas fa-clipboard-check"></i> Take Attendance
+</a>
+<a href="{% url 'staff:assign_homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Assign Homework
+</a>
+<a href="{% url 'staff:select_exam' %}" class="nav-item">
+    <i class="fas fa-pen-fancy"></i> Enter Marks
+</a>
+<div class="nav-label">Personal</div>
+<a href="{% url 'staff:apply_leave' %}" class="nav-item">
+    <i class="fas fa-calendar-minus"></i> Apply Leave
+</a>
+<a href="{% url 'staff:view_salary' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Salary Slips
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in">
+    <div class="content-card-header">
+        <h3><i class="fas fa-school" style="color: var(--primary); margin-right: 8px;"></i>Select Class for Attendance
+        </h3>
+    </div>
+    <div class="content-card-body">
+        {% if classes %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
+            {% for class in classes %}
+            <div style="background: var(--bg-light); border-radius: 16px; border: 1px solid var(--border); padding: 24px; transition: all 0.2s;"
+                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';"
+                onmouseout="this.style.transform=''; this.style.boxShadow='';">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="qa-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-chalkboard"></i>
+                    </div>
+                    {% if class.teacher == request.user.staff_profile %}
+                    <span class="badge badge-green">Class Teacher</span>
+                    {% endif %}
+                </div>
+                <h4 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Class {{
+                    class.name }}</h4>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">Section: {{ class.section
+                    }}</p>
+                <div
+                    style="padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; color: var(--text-secondary);">
+                        {% if class.teacher %}{{ class.teacher.user.get_full_name }}{% else %}<em>No Teacher</em>{%
+                        endif %}
+                    </span>
+                    <a href="{% url 'staff:take_attendance' class.id %}" class="sidebar-create-btn"
+                        style="padding: 6px 16px; font-size: 12px;">
+                        Take <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-school"></i></div>
+            <p>No classes found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

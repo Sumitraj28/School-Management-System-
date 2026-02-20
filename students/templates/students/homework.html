@@ -1,0 +1,71 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Homework — SMS{% endblock %}
+
+{% block header_title %}Homework{% endblock %}
+{% block user_role %}Student{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'students:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'students:attendance' %}" class="nav-item">
+    <i class="fas fa-calendar-check"></i> Attendance
+</a>
+<a href="{% url 'students:grades' %}" class="nav-item">
+    <i class="fas fa-award"></i> Grades
+</a>
+<a href="{% url 'students:fees' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Fees
+</a>
+<a href="{% url 'students:homework' %}" class="nav-item active">
+    <i class="fas fa-book-open"></i> Homework
+</a>
+<a href="{% url 'students:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> Timetable
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in">
+    <div class="content-card-header">
+        <h3><i class="fas fa-book-open" style="color: var(--accent-yellow); margin-right: 8px;"></i>Homework &
+            Assignments</h3>
+    </div>
+    <div class="content-card-body">
+        {% if homework_list %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            {% for assignment in homework_list %}
+            <div style="background: var(--bg-light); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; transition: all 0.2s;"
+                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';"
+                onmouseout="this.style.transform=''; this.style.boxShadow='';">
+                <div style="padding: 20px; border-bottom: 1px solid var(--border);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <span class="badge badge-blue">{{ assignment.subject.name }}</span>
+                        <span style="font-size: 12px; color: var(--text-secondary);">{{ assignment.assigned_date|date:"M
+                            d" }}</span>
+                    </div>
+                    <h4 style="font-size: 17px; font-weight: 700; color: var(--text-primary);">{{ assignment.title }}
+                    </h4>
+                </div>
+                <div style="padding: 16px 20px;">
+                    <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin-bottom: 16px;">{{
+                        assignment.description|truncatewords:25 }}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="badge badge-pink"><i class="fas fa-clock" style="margin-right: 4px;"></i> Due: {{
+                            assignment.due_date|date:"D, M d" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-check-circle"></i></div>
+            <p>No homework assignments found. Enjoy your free time! 🎉</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

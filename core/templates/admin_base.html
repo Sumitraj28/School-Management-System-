@@ -1,0 +1,376 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<!-- Re-include Font Awesome to guarantee it loads AFTER Django admin CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+    /* ============================================================
+       ADMIN SIDEBAR STYLES
+       These styles use high-specificity + !important to survive
+       Django admin CSS (admin/css/base.css) which sets global
+       styles on a, body, *, etc.
+       ============================================================ */
+
+    /* === Sidebar Protection === */
+    .sidebar,
+    .sidebar *,
+    .sidebar-brand,
+    .sidebar-brand * {
+        font-family: 'Outfit', sans-serif !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Restore all sidebar links */
+    .sidebar a,
+    .sidebar a:link,
+    .sidebar a:visited,
+    .sidebar a:hover,
+    .sidebar a:active {
+        text-decoration: none !important;
+    }
+
+    .sidebar .nav-item {
+        text-decoration: none !important;
+        color: var(--text-secondary) !important;
+    }
+
+    .sidebar .nav-item:hover {
+        color: var(--primary) !important;
+    }
+
+    .sidebar .nav-item.active {
+        color: var(--primary) !important;
+        font-weight: 600 !important;
+    }
+
+    /* === Font Awesome Icons Protection === */
+    .sidebar .fas,
+    .sidebar .far,
+    .sidebar .fab,
+    .sidebar .fa,
+    .sidebar i.fas,
+    .sidebar i.far,
+    .sidebar i.fab,
+    .sidebar i.fa,
+    .top-header .fas,
+    .top-header .far,
+    .top-header i,
+    .sidebar-bottom-card .fas {
+        font-family: 'Font Awesome 6 Free' !important;
+        font-style: normal !important;
+        font-variant: normal !important;
+        text-rendering: auto !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        line-height: 1 !important;
+    }
+
+    .sidebar .fas,
+    .sidebar .fa,
+    .sidebar i.fas,
+    .sidebar i.fa,
+    .top-header .fas,
+    .sidebar-bottom-card .fas {
+        font-weight: 900 !important;
+    }
+
+    .sidebar .far,
+    .sidebar i.far,
+    .top-header .far {
+        font-weight: 400 !important;
+    }
+
+    .sidebar .fab,
+    .sidebar i.fab {
+        font-family: 'Font Awesome 6 Brands' !important;
+        font-weight: 400 !important;
+    }
+
+    /* === Nav Group (Accordion) === */
+    .nav-group {
+        margin-bottom: 4px !important;
+    }
+
+    .nav-group-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 11px 16px !important;
+        border-radius: 10px !important;
+        cursor: pointer !important;
+        color: var(--text-secondary) !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s !important;
+        text-decoration: none !important;
+        user-select: none !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .nav-group-header:hover {
+        background: white !important;
+        color: var(--primary) !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .nav-group-header.active {
+        background: var(--primary-light) !important;
+        color: var(--primary) !important;
+        font-weight: 600 !important;
+    }
+
+    .nav-group-header i:first-child {
+        width: 20px !important;
+        text-align: center !important;
+        margin-right: 12px !important;
+        font-size: 15px !important;
+    }
+
+    .nav-group-header .chevron {
+        font-size: 10px !important;
+        transition: transform 0.2s !important;
+        opacity: 0.6 !important;
+    }
+
+    .nav-group.expanded .nav-group-header .chevron {
+        transform: rotate(90deg) !important;
+    }
+
+    .nav-sub {
+        display: none !important;
+        padding: 4px 0 8px 0 !important;
+        animation: slideDown 0.2s ease !important;
+    }
+
+    .nav-group.expanded .nav-sub {
+        display: block !important;
+    }
+
+    .nav-sub-item {
+        display: flex !important;
+        align-items: center !important;
+        padding: 8px 16px 8px 48px !important;
+        font-size: 13px !important;
+        color: var(--text-secondary) !important;
+        text-decoration: none !important;
+        transition: all 0.15s !important;
+        border-radius: 8px !important;
+        margin: 1px 0 !important;
+        background: transparent !important;
+    }
+
+    .nav-sub-item:hover {
+        color: var(--primary) !important;
+        background: rgba(108, 99, 255, 0.05) !important;
+    }
+
+    .nav-sub-item.active {
+        color: var(--primary) !important;
+        font-weight: 600 !important;
+        background: rgba(108, 99, 255, 0.1) !important;
+    }
+
+    /* === Top Header Protection === */
+    .top-header,
+    .top-header * {
+        font-family: 'Outfit', sans-serif !important;
+    }
+
+    .top-header a,
+    .top-header a:link,
+    .top-header a:visited {
+        text-decoration: none !important;
+    }
+
+    /* === Sidebar Bottom Card Protection === */
+    .sidebar-bottom-card,
+    .sidebar-bottom-card * {
+        font-family: 'Outfit', sans-serif !important;
+    }
+
+    .sidebar-bottom-card a,
+    .sidebar-bottom-card a:link,
+    .sidebar-bottom-card a:visited {
+        text-decoration: none !important;
+    }
+
+    .sidebar-bottom-card .sidebar-create-btn {
+        background: var(--primary) !important;
+        color: white !important;
+        text-decoration: none !important;
+        border-radius: 8px !important;
+        padding: 8px 16px !important;
+        display: inline-flex !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{{ block.super }}
+{% endblock %}
+
+{% block sidebar_nav %}
+<!-- Dashboard -->
+<a href="{% url 'admin_dashboard' %}"
+    class="nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+
+<!-- Academics -->
+<div class="nav-group {% if '/academics/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/academics/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-book-open"></i> Academics
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/academics/attendance/"
+            class="nav-sub-item {% if '/attendance/' in request.path %}active{% endif %}">Attendances</a>
+        <a href="/admin/academics/class/"
+            class="nav-sub-item {% if '/class/' in request.path %}active{% endif %}">Classes</a>
+        <a href="/admin/academics/exam/"
+            class="nav-sub-item {% if '/exam/' in request.path %}active{% endif %}">Exams</a>
+        <a href="/admin/academics/grade/"
+            class="nav-sub-item {% if '/grade/' in request.path %}active{% endif %}">Grades</a>
+        <a href="/admin/academics/subject/"
+            class="nav-sub-item {% if '/subject/' in request.path %}active{% endif %}">Subjects</a>
+        <a href="{% url 'academics:manage_timetable' %}"
+            class="nav-sub-item {% if 'timetable' in request.path %}active{% endif %}">Timetables</a>
+    </div>
+</div>
+
+<!-- Authentication -->
+<div class="nav-group {% if '/auth/' in request.path or '/groups/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/auth/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-shield-alt"></i> Auth
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/auth/group/" class="nav-sub-item {% if '/group/' in request.path %}active{% endif %}">Groups</a>
+    </div>
+</div>
+
+<!-- Core -->
+<div class="nav-group {% if '/core/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/core/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-layer-group"></i> Core
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/core/activitylog/"
+            class="nav-sub-item {% if '/activitylog/' in request.path %}active{% endif %}">Activity logs</a>
+        <a href="/admin/core/announcement/"
+            class="nav-sub-item {% if '/announcement/' in request.path %}active{% endif %}">Announcements</a>
+        <a href="/admin/core/notification/"
+            class="nav-sub-item {% if '/notification/' in request.path %}active{% endif %}">Notifications</a>
+        <a href="/admin/core/user/" class="nav-sub-item {% if '/user/' in request.path %}active{% endif %}">Users</a>
+    </div>
+</div>
+
+<!-- Finance -->
+<div class="nav-group {% if '/finance/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/finance/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-wallet"></i> Finance
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/finance/feestructure/"
+            class="nav-sub-item {% if '/feestructure/' in request.path %}active{% endif %}">Fee structures</a>
+        <a href="/admin/finance/invoice/"
+            class="nav-sub-item {% if '/invoice/' in request.path %}active{% endif %}">Invoices</a>
+        <a href="/admin/finance/payment/"
+            class="nav-sub-item {% if '/payment/' in request.path %}active{% endif %}">Payments</a>
+    </div>
+</div>
+
+<!-- Staff -->
+<div class="nav-group {% if '/staff/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/staff/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-chalkboard-teacher"></i> Staff
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/staff/leave/"
+            class="nav-sub-item {% if '/leave/' in request.path %}active{% endif %}">Leaves</a>
+        <a href="/admin/staff/payslip/"
+            class="nav-sub-item {% if '/payslip/' in request.path %}active{% endif %}">Payslips</a>
+        <a href="/admin/staff/staff/"
+            class="nav-sub-item {% if '/staff/staff/' in request.path %}active{% endif %}">Staffs</a>
+    </div>
+</div>
+
+<!-- Students -->
+<div class="nav-group {% if '/students/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/students/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-user-graduate"></i> Students
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/students/parent/"
+            class="nav-sub-item {% if '/parent/' in request.path %}active{% endif %}">Parents</a>
+        <a href="/admin/students/student/"
+            class="nav-sub-item {% if '/student/' in request.path %}active{% endif %}">Students</a>
+    </div>
+</div>
+
+<!-- Transport -->
+<div class="nav-group {% if '/transport/' in request.path %}expanded{% endif %}">
+    <div class="nav-group-header {% if '/transport/' in request.path %}active{% endif %}" onclick="toggleGroup(this)">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-bus"></i> Transport
+        </div>
+        <i class="fas fa-chevron-right chevron"></i>
+    </div>
+    <div class="nav-sub">
+        <a href="/admin/transport/driver/"
+            class="nav-sub-item {% if '/driver/' in request.path %}active{% endif %}">Drivers</a>
+        <a href="/admin/transport/fuellog/"
+            class="nav-sub-item {% if '/fuellog/' in request.path %}active{% endif %}">Fuel logs</a>
+        <a href="/admin/transport/maintenancelog/"
+            class="nav-sub-item {% if '/maintenancelog/' in request.path %}active{% endif %}">Maintenance logs</a>
+        <a href="/admin/transport/route/"
+            class="nav-sub-item {% if '/route/' in request.path %}active{% endif %}">Routes</a>
+        <a href="/admin/transport/studenttransport/"
+            class="nav-sub-item {% if '/studenttransport/' in request.path %}active{% endif %}">Student transports</a>
+        <a href="/admin/transport/transportattendance/"
+            class="nav-sub-item {% if '/transportattendance/' in request.path %}active{% endif %}">Transport
+            attendances</a>
+        <a href="/admin/transport/vehicle/"
+            class="nav-sub-item {% if '/vehicle/' in request.path %}active{% endif %}">Vehicles</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{{ block.super }}
+<script>
+    function toggleGroup(header) {
+        header.parentElement.classList.toggle('expanded');
+    }
+</script>
+{% endblock %}

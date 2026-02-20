@@ -1,0 +1,184 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Driver Dashboard — SMS{% endblock %}
+
+{% block header_title %}Driver Panel{% endblock %}
+{% block user_role %}Driver{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'transport:driver_dashboard' %}" class="nav-item active">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'transport:log_fuel' %}" class="nav-item">
+    <i class="fas fa-gas-pump"></i> Log Fuel
+</a>
+<a href="{% url 'transport:log_maintenance' %}" class="nav-item">
+    <i class="fas fa-wrench"></i> Log Maintenance
+</a>
+{% endblock %}
+
+
+
+{% block dashboard_content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner animate-in">
+    <div class="welcome-text">
+        <h2>Welcome, {{ driver.user.first_name }}! 🚌</h2>
+        <p>Here's your vehicle assignment and route information for today.</p>
+    </div>
+    <div class="welcome-illustration">
+        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Steering wheel -->
+            <circle cx="100" cy="70" r="35" stroke="#6C63FF" stroke-width="4" fill="none" />
+            <circle cx="100" cy="70" r="8" fill="#6C63FF" />
+            <line x1="100" y1="35" x2="100" y2="62" stroke="#6C63FF" stroke-width="3" />
+            <line x1="65" y1="70" x2="92" y2="70" stroke="#6C63FF" stroke-width="3" />
+            <line x1="108" y1="70" x2="135" y2="70" stroke="#6C63FF" stroke-width="3" />
+            <line x1="100" y1="78" x2="100" y2="105" stroke="#6C63FF" stroke-width="3" />
+            <!-- Keys -->
+            <circle cx="155" cy="110" r="6" fill="#F5C542" />
+            <rect x="161" y="107" width="20" height="6" rx="2" fill="#F5C542" />
+            <rect x="170" y="113" width="5" height="3" rx="1" fill="#D97706" />
+            <rect x="175" y="113" width="5" height="3" rx="1" fill="#D97706" />
+            <!-- Coffee -->
+            <rect x="30" y="100" width="16" height="20" rx="4" fill="#FCA5A5" />
+            <path d="M46 106 Q52 106 52 112 Q52 118 46 118" stroke="#FCA5A5" stroke-width="2" fill="none" />
+            <path d="M34 97 Q36 92 38 97" stroke="#E5E7EB" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M39 95 Q41 89 43 95" stroke="#E5E7EB" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="content-grid animate-in animate-delay-1">
+
+    <!-- LEFT: Vehicle Info + Routes -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Vehicle Info -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bus" style="color: var(--primary); margin-right: 8px;"></i>Assigned Vehicle</h3>
+            </div>
+            <div class="content-card-body">
+                {% if vehicle %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-hashtag"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Registration Number</h4>
+                        <p>{{ vehicle.registration_number }}</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Model</h4>
+                        <p>{{ vehicle.model }}</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #D1FAE5; color: #059669;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Capacity</h4>
+                        <p>{{ vehicle.capacity }} Seats</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <p>No vehicle currently assigned.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Routes -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-route" style="color: var(--accent-green); margin-right: 8px;"></i>Assigned Routes
+                </h3>
+            </div>
+            <div class="content-card-body">
+                {% if routes %}
+                {% for route in routes %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ route.name }}</h4>
+                        <p>{{ route.start_point }} → {{ route.end_point }}</p>
+                    </div>
+                    <div class="action-btn-row">
+                        <a href="{% url 'transport:attendance' route.id %}" class="action-btn"
+                            title="Manage Attendance">
+                            <i class="fas fa-clipboard-check"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-map"></i></div>
+                    <p>No routes assigned to this vehicle yet.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Quick Actions -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bolt" style="color: var(--accent-yellow); margin-right: 8px;"></i>Quick Actions
+                </h3>
+            </div>
+            <div class="content-card-body">
+                <a href="{% url 'transport:log_fuel' %}" class="list-item"
+                    style="text-decoration:none; cursor:pointer;">
+                    <div class="list-item-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Log Fuel</h4>
+                        <p>Record fuel consumption for your vehicle</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                </a>
+                <a href="{% url 'transport:log_maintenance' %}" class="list-item"
+                    style="text-decoration:none; cursor:pointer;">
+                    <div class="list-item-icon" style="background: #D1FAE5; color: #059669;">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Log Maintenance</h4>
+                        <p>Report repairs or scheduled service</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Safety Card -->
+        <div class="info-card" style="background: linear-gradient(135deg, #34D399, #059669);">
+            <h4><i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Safety First</h4>
+            <p>Always follow traffic rules and ensure all students are safely transported every day.</p>
+            <a href="#" class="info-card-btn" style="color: #059669;">Safety Guidelines</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

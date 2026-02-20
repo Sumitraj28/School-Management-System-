@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS — School Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --purple: #6C63FF;
+            --purple-dark: #4F46E5;
+            --purple-light: #F0EEFF;
+            --orange: #FF8C42;
+            --orange-light: #FFF4EC;
+            --navy: #1E1E2D;
+            --text: #374151;
+            --text-light: #6B7280;
+            --bg: #FFFFFF;
+            --bg-light: #F9FAFB;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--purple), #8B5CF6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
+        }
+
+        .nav-brand span {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .nav-brand span em {
+            font-style: normal;
+            color: var(--purple);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--purple);
+            background: var(--purple-light);
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: var(--purple);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 10px;
+            transition: .3s;
+            box-shadow: 0 4px 14px rgba(108, 99, 255, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .mobile-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 60px 24px 80px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #FAFAFF 0%, #fff 100%);
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            background: var(--orange-light);
+            color: var(--orange);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge i {
+            font-size: 10px;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900;
+            color: var(--navy);
+            line-height: 1.12;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero h1 .highlight {
+            color: var(--purple);
+        }
+
+        .hero-desc {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.7;
+            max-width: 460px;
+            margin-bottom: 32px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            padding: 14px 32px;
+            background: var(--purple);
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: .3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-outline {
+            padding: 14px 32px;
+            border: 2px solid var(--border);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: .3s;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--purple);
+            color: var(--purple);
+            background: var(--purple-light);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .hero-stat .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .hero-stat .label {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-img-wrapper {
+            position: relative;
+            width: 420px;
+            height: 420px;
+            border-radius: 50% 50% 50% 0;
+            background: linear-gradient(135deg, var(--purple-light), #E8E0FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-illustration {
+            width: 340px;
+            height: auto;
+        }
+
+        /* Decorative shapes */
+        .deco {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .deco-1 {
+            width: 60px;
+            height: 60px;
+            background: var(--orange);
+            top: 10%;
+            right: 5%;
+            opacity: .15;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .deco-2 {
+            width: 80px;
+            height: 80px;
+            background: var(--purple);
+            bottom: 20%;
+            left: -5%;
+            opacity: .1;
+            animation: float 7s ease-in-out infinite 1s;
+        }
+
+        .deco-3 {
+            width: 18px;
+            height: 18px;
+            background: var(--orange);
+            top: 30%;
+            left: 10%;
+            opacity: .5;
+            animation: float 4s ease-in-out infinite 2s;
+        }
+
+        .deco-star {
+            position: absolute;
+            color: var(--orange);
+            font-size: 20px;
+            animation: spin 6s linear infinite;
+        }
+
+        .deco-star-1 {
+            top: 15%;
+            left: 45%;
+        }
+
+        .deco-star-2 {
+            bottom: 25%;
+            right: 10%;
+            font-size: 14px;
+            color: var(--purple);
+            animation-duration: 8s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-16px)
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0)
+            }
+
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* TRUSTED */
+        .trusted {
+            padding: 48px 24px;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trusted-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .trusted p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .trusted-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .trusted-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9CA3AF;
+            font-size: 17px;
+            font-weight: 700;
+            transition: .3s;
+        }
+
+        .trusted-logo:hover {
+            color: var(--navy);
+        }
+
+        .trusted-logo i {
+            font-size: 22px;
+            color: var(--purple);
+            opacity: .5;
+        }
+
+        /* SECTION COMMON */
+        .section {
+            padding: 80px 24px;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: var(--purple-light);
+            color: var(--purple);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 12px;
+            letter-spacing: -.5px;
+        }
+
+        .section-desc {
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        /* PORTALS */
+        .portals {
+            background: var(--bg-light);
+        }
+
+        .portal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .portal-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: .35s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, .08);
+            border-color: transparent;
+        }
+
+        .portal-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 20px 20px 0 0;
+            opacity: 0;
+            transition: .3s;
+        }
+
+        .portal-card:hover::after {
+            opacity: 1;
+        }
+
+        .portal-card:nth-child(1)::after {
+            background: linear-gradient(90deg, #3B82F6, #60A5FA);
+        }
+
+        .portal-card:nth-child(2)::after {
+            background: linear-gradient(90deg, #059669, #34D399);
+        }
+
+        .portal-card:nth-child(3)::after {
+            background: linear-gradient(90deg, #D97706, var(--orange));
+        }
+
+        .portal-card:nth-child(4)::after {
+            background: linear-gradient(90deg, var(--purple), #8B5CF6);
+        }
+
+        .portal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            transition: .3s;
+        }
+
+        .portal-card:hover .portal-icon {
+            transform: scale(1.1) rotate(4deg);
+        }
+
+        .portal-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .portal-card p {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* FEATURES */
+        .features {
+            background: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feat-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+            transition: .3s;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, .06);
+            border-color: transparent;
+        }
+
+        .feat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .feat-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .feat-card p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ABOUT / CTA */
+        .about {
+            background: var(--bg-light);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .about-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .about-circle {
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-light), #DDD6FE);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .about-circle::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 3px dashed rgba(108, 99, 255, .2);
+            animation: spin 20s linear infinite;
+        }
+
+        .about-circle svg {
+            width: 200px;
+            height: 200px;
+        }
+
+        .about-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .about-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .about-list .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--purple-light);
+            color: var(--purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--navy), #2D1B69);
+            padding: 64px 24px;
+            color: #fff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: .6;
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 80px 24px;
+            background: #fff;
+        }
+
+        .cta-card {
+            max-width: 960px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--purple), #8B5CF6);
+            border-radius: 28px;
+            padding: 64px 48px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(108, 99, 255, .25);
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -15%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, .06);
+            border-radius: 50%;
+        }
+
+        .cta-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(245, 197, 66, .1);
+            border-radius: 50%;
+        }
+
+        .cta-card h2 {
+            font-size: clamp(26px, 4vw, 40px);
+            font-weight: 800;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-card p {
+            font-size: 17px;
+            opacity: .85;
+            max-width: 480px;
+            margin: 0 auto 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 36px;
+            background: #fff;
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: .3s;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--navy);
+            color: rgba(255, 255, 255, .5);
+            padding: 64px 24px 28px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+        }
+
+        .footer h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .footer h3 em {
+            font-style: normal;
+            color: var(--purple);
+        }
+
+        .footer p {
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 260px;
+        }
+
+        .footer h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer li {
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, .45);
+            text-decoration: none;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 13px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: .7s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .reveal.vis {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:1024px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-btns,
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                margin-top: 32px;
+            }
+
+            .hero-img-wrapper {
+                width: 320px;
+                height: 320px;
+            }
+
+            .portal-grid,
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-list {
+                justify-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width:640px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: #fff;
+                border-bottom: 1px solid var(--border);
+                flex-direction: column;
+                padding: 16px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-btn {
+                display: block;
+            }
+
+            .portal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-list {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-img-wrapper {
+                width: 260px;
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{% url 'home' %}" class="nav-brand">
+                <div class="nav-logo"><i class="fas fa-graduation-cap"></i></div>
+                <span>SMS<em>.</em></span>
+            </a>
+            <button class="mobile-btn" onclick="document.getElementById('navLinks').classList.toggle('open')"><i
+                    class="fas fa-bars"></i></button>
+            <div class="nav-links" id="navLinks">
+                <a href="#portals" class="nav-link active">Portals</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard_router' %}" class="nav-cta"><i class="fas fa-th-large"></i> Dashboard</a>
+                {% else %}
+                <a href="#portals" class="nav-cta">Get Started <i class="fas fa-arrow-right"
+                        style="font-size:12px;margin-left:4px;"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="deco deco-1"></div>
+        <div class="deco deco-2"></div>
+        <div class="deco deco-3"></div>
+        <i class="fas fa-star deco-star deco-star-1"></i>
+        <i class="fas fa-star deco-star deco-star-2"></i>
+
+        <div class="hero-inner">
+            <div>
+                <div class="hero-badge"><i class="fas fa-circle"></i> Start Learning Today</div>
+                <h1>The Best Platform to <span class="highlight">Manage</span> Your School <span
+                        class="highlight">Smarter</span></h1>
+                <p class="hero-desc">Our mission is to help schools streamline administration, empower educators, and
+                    inspire students — online and offline, anywhere.</p>
+                <div class="hero-btns">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard_router' %}" class="btn-primary">Dashboard <i
+                            class="fas fa-arrow-right"></i></a>
+                    {% else %}
+                    <a href="#portals" class="btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
+                    {% endif %}
+                    <a href="#features" class="btn-outline">Learn More</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="num">1.2K+</div>
+                        <div class="label">Active Students</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="num">98%</div>
+                        <div class="label">Satisfaction</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="num">50+</div>
+                        <div class="label">Teachers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-img-wrapper">
+                    <!-- Inline SVG illustration -->
+                    <svg class="hero-illustration" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="170" cy="170" r="150" fill="#EDE9FE" />
+                        <rect x="100" y="80" width="140" height="180" rx="12" fill="#fff" stroke="#E5E7EB"
+                            stroke-width="2" />
+                        <rect x="116" y="104" width="108" height="8" rx="4" fill="#6C63FF" opacity=".3" />
+                        <rect x="116" y="120" width="80" height="6" rx="3" fill="#E5E7EB" />
+                        <rect x="116" y="134" width="96" height="6" rx="3" fill="#E5E7EB" />
+                        <rect x="116" y="158" width="108" height="32" rx="8" fill="#6C63FF" />
+                        <text x="170" y="179" text-anchor="middle" fill="#fff" font-size="12" font-weight="600"
+                            font-family="Outfit">Dashboard</text>
+                        <rect x="116" y="200" width="50" height="40" rx="8" fill="#FEF3C7" />
+                        <text x="141" y="225" text-anchor="middle" fill="#D97706" font-size="20"
+                            font-family="Outfit">📊</text>
+                        <rect x="174" y="200" width="50" height="40" rx="8" fill="#D1FAE5" />
+                        <text x="199" y="225" text-anchor="middle" fill="#059669" font-size="20"
+                            font-family="Outfit">📚</text>
+                        <!-- Person silhouette -->
+                        <circle cx="260" cy="130" r="28" fill="#F5C542" opacity=".8" />
+                        <circle cx="260" cy="120" r="14" fill="#fff" />
+                        <ellipse cx="260" cy="148" rx="18" ry="10" fill="#fff" />
+                        <!-- Floating elements -->
+                        <circle cx="80" cy="140" r="18" fill="#FF8C42" opacity=".2" />
+                        <rect x="70" y="230" width="28" height="28" rx="6" fill="#6C63FF" opacity=".15"
+                            transform="rotate(15 84 244)" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUSTED -->
+    <section class="trusted reveal">
+        <div class="trusted-inner">
+            <p>Trusted by <strong style="color:var(--navy);">4,000+</strong> institutions worldwide</p>
+            <div class="trusted-logos">
+                <div class="trusted-logo"><i class="fas fa-school"></i> Delhi Public</div>
+                <div class="trusted-logo"><i class="fas fa-university"></i> Oxford Academy</div>
+                <div class="trusted-logo"><i class="fas fa-landmark"></i> Cambridge Intl</div>
+                <div class="trusted-logo"><i class="fas fa-book-open"></i> St. Xavier's</div>
+                <div class="trusted-logo"><i class="fas fa-star"></i> Star Academy</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTALS -->
+    <section id="portals" class="section portals">
+        <div class="section-inner">
+            <div class="portal-header">
+                <div>
+                    <div class="section-label"><i class="fas fa-th-large"></i> Access Portals</div>
+                    <h2 class="section-title">Explore Our Portals</h2>
+                    <p style="font-size:15px;color:var(--text-light);max-width:440px;line-height:1.6;">Choose your role
+                        to access the dedicated portal with tools designed specifically for you.</p>
+                </div>
+            </div>
+            <div class="portal-grid">
+                <a href="{% url 'login_student' %}" class="portal-card reveal">
+                    <div class="portal-icon" style="background:#DBEAFE;color:#2563EB;"><i
+                            class="fas fa-user-graduate"></i></div>
+                    <h3>Student Portal</h3>
+                    <p>View grades, attendance, homework, fees & timetable from your personal dashboard.</p>
+                </a>
+                <a href="{% url 'login_teacher' %}" class="portal-card reveal">
+                    <div class="portal-icon" style="background:#D1FAE5;color:#059669;"><i
+                            class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Teacher Portal</h3>
+                    <p>Manage classes, take attendance, assign homework, and enter marks with ease.</p>
+                </a>
+                <a href="{% url 'login_driver' %}" class="portal-card reveal">
+                    <div class="portal-icon" style="background:#FEF3C7;color:#D97706;"><i class="fas fa-bus"></i></div>
+                    <h3>Driver Portal</h3>
+                    <p>View routes, log fuel & maintenance records, and manage your daily transport duties.</p>
+                </a>
+                <a href="{% url 'login_admin' %}" class="portal-card reveal">
+                    <div class="portal-icon" style="background:#EDE9FE;color:#7C3AED;"><i
+                            class="fas fa-user-shield"></i></div>
+                    <h3>Admin Portal</h3>
+                    <p>Full system control — manage students, staff, finance, transport & academics.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="section features">
+        <div class="section-inner">
+            <div class="section-label"><i class="fas fa-bolt"></i> Features</div>
+            <h2 class="section-title">Everything You Need</h2>
+            <p class="section-desc">Built with precision for modern educators — every feature designed to save time and
+                amplify impact.</p>
+            <div class="features-grid">
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#DBEAFE;color:#2563EB;"><i
+                            class="fas fa-user-graduate"></i></div>
+                    <h3>Student Records</h3>
+                    <p>Complete student profiles, real-time performance tracking, and digital attendance management.</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#D1FAE5;color:#059669;"><i
+                            class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Faculty Tools</h3>
+                    <p>Streamlined tools for lesson planning, grading, homework assignment, and parent communication.
+                    </p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#EDE9FE;color:#7C3AED;"><i class="fas fa-wallet"></i></div>
+                    <h3>Smart Finance</h3>
+                    <p>Automated fee management, salary processing, and transparent financial reporting.</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#FEF3C7;color:#D97706;"><i class="fas fa-bus"></i></div>
+                    <h3>Transport</h3>
+                    <p>Fleet management, route optimization, fuel tracking, and maintenance log management.</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#FEE2E2;color:#DC2626;"><i
+                            class="fas fa-clipboard-list"></i></div>
+                    <h3>Exams</h3>
+                    <p>Effortless exam scheduling, grading, and automatic report card generation for all classes.</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon" style="background:#FCE7F3;color:#DB2777;"><i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Admin Panel</h3>
+                    <p>Centralized command center with role-based access control and audit logging.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about">
+        <div class="section-inner">
+            <div class="about-grid">
+                <div class="about-visual reveal">
+                    <div class="about-circle">
+                        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="70" r="40" fill="#6C63FF" opacity=".2" />
+                            <circle cx="100" cy="60" r="22" fill="#fff" />
+                            <ellipse cx="100" cy="90" rx="28" ry="14" fill="#fff" />
+                            <rect x="40" y="120" width="120" height="50" rx="10" fill="#fff" stroke="#E5E7EB"
+                                stroke-width="1.5" />
+                            <rect x="55" y="132" width="60" height="6" rx="3" fill="#6C63FF" opacity=".3" />
+                            <rect x="55" y="144" width="90" height="6" rx="3" fill="#E5E7EB" />
+                            <rect x="55" y="156" width="45" height="6" rx="3" fill="#E5E7EB" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <div class="section-label"><i class="fas fa-info-circle"></i> About Us</div>
+                    <h2 class="section-title">We Offer Smart Management by Skilled Team</h2>
+                    <p class="section-desc">Our platform is built by education technology experts who understand the
+                        needs of modern schools.</p>
+                    <ul class="about-list">
+                        <li><span class="check"><i class="fas fa-check"></i></span>
+                            <div><strong>Exclusive Support</strong><br><span
+                                    style="font-size:13px;color:var(--text-light);">24/7 dedicated support for your
+                                    institution.</span></div>
+                        </li>
+                        <li><span class="check"><i class="fas fa-check"></i></span>
+                            <div><strong>Fully Certified</strong><br><span
+                                    style="font-size:13px;color:var(--text-light);">ISO certified platform with top-tier
+                                    security.</span></div>
+                        </li>
+                        <li><span class="check"><i class="fas fa-check"></i></span>
+                            <div><strong>Modern Dashboard</strong><br><span
+                                    style="font-size:13px;color:var(--text-light);">Beautiful, intuitive interface for
+                                    all users.</span></div>
+                        </li>
+                        <li><span class="check"><i class="fas fa-check"></i></span>
+                            <div><strong>Cloud Based</strong><br><span
+                                    style="font-size:13px;color:var(--text-light);">Access your data from anywhere,
+                                    anytime.</span></div>
+                        </li>
+                    </ul>
+                    <a href="{% url 'login' %}" class="btn-primary" style="margin-top:32px;">Learn More <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-bar">
+        <div class="stats-grid">
+            <div class="reveal">
+                <div class="stat-num"
+                    style="background:linear-gradient(135deg,#F5C542,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    1.2K+</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num"
+                    style="background:linear-gradient(135deg,#34D399,#059669);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    98%</div>
+                <div class="stat-label">Satisfaction</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num"
+                    style="background:linear-gradient(135deg,#60A5FA,#2563EB);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    24/7</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num"
+                    style="background:linear-gradient(135deg,#F472B6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    5+</div>
+                <div class="stat-label">Years</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-card reveal">
+            <h2>Ready to Transform Your School?</h2>
+            <p>Join hundreds of institutions already using our platform to streamline operations.</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard_router' %}" class="cta-btn"><i class="fas fa-th-large"></i> Go to Dashboard</a>
+            {% else %}
+            <a href="#portals" class="cta-btn"><i class="fas fa-rocket"></i> Get Started Now</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <h3>SMS<em>.</em></h3>
+                <p>Empowering the next generation of learners with cutting-edge technology.</p>
+            </div>
+            <div>
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#portals">Portals</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Portals</h4>
+                <ul>
+                    <li><a href="{% url 'login_student' %}">Student</a></li>
+                    <li><a href="{% url 'login_teacher' %}">Teacher</a></li>
+                    <li><a href="{% url 'login_admin' %}">Admin</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 SMS — Built with ❤️ for Education.</div>
+    </footer>
+
+    <script>
+        const revEls = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver((entries) => { entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('vis'), i * 60); obs.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+        revEls.forEach(el => obs.observe(el));
+        document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function (e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth' }); document.getElementById('navLinks').classList.remove('open'); }); });
+    </script>
+</body>
+
+</html>

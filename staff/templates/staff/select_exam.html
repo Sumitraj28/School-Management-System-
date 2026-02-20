@@ -1,0 +1,94 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Select Exam — SMS{% endblock %}
+
+{% block header_title %}Enter Marks{% endblock %}
+{% block user_role %}Staff{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'staff:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'staff:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> My Timetable
+</a>
+<a href="{% url 'staff:select_attendance_class' %}" class="nav-item">
+    <i class="fas fa-clipboard-check"></i> Take Attendance
+</a>
+<a href="{% url 'staff:assign_homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Assign Homework
+</a>
+<a href="{% url 'staff:select_exam' %}" class="nav-item active">
+    <i class="fas fa-pen-fancy"></i> Enter Marks
+</a>
+<div class="nav-label">Personal</div>
+<a href="{% url 'staff:apply_leave' %}" class="nav-item">
+    <i class="fas fa-calendar-minus"></i> Apply Leave
+</a>
+<a href="{% url 'staff:view_salary' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Salary Slips
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in">
+    <div class="content-card-header">
+        <h3><i class="fas fa-pen-fancy" style="color: var(--primary); margin-right: 8px;"></i>Select Exam to Enter Marks
+        </h3>
+    </div>
+    <div style="padding: 12px 20px; border-bottom: 1px solid var(--border);">
+        <input type="text" id="examSearch" placeholder="🔍 Search exams..." class="form-input">
+    </div>
+    <div class="content-card-body" style="padding: 0;">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Subject</th>
+                        <th>Class</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="examTableBody">
+                    {% for exam in exams %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ exam.name }}</td>
+                        <td>{{ exam.subject.name }}</td>
+                        <td>{{ exam.class_group.name }}</td>
+                        <td style="color: var(--text-secondary);">{{ exam.date }}</td>
+                        <td>
+                            <a href="{% url 'staff:enter_marks' exam.id %}" class="sidebar-create-btn"
+                                style="padding: 4px 14px; font-size: 12px; display: inline-flex;">
+                                Enter Marks
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 32px; color: var(--text-secondary);">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-file-alt"></i></div>
+                                <p>No exams found. Please ask admin to schedule exams first.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('examSearch').addEventListener('keyup', function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#examTableBody tr');
+        rows.forEach(row => {
+            let text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

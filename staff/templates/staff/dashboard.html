@@ -1,0 +1,264 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Staff Dashboard — SMS{% endblock %}
+
+{% block header_title %}Staff Dashboard{% endblock %}
+{% block user_role %}{{ staff.designation }}{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'staff:dashboard' %}" class="nav-item active">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'staff:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> My Timetable
+</a>
+<a href="{% url 'staff:select_attendance_class' %}" class="nav-item">
+    <i class="fas fa-clipboard-check"></i> Take Attendance
+</a>
+<a href="{% url 'staff:assign_homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Assign Homework
+</a>
+<a href="{% url 'staff:select_exam' %}" class="nav-item">
+    <i class="fas fa-pen-fancy"></i> Enter Marks
+</a>
+
+<div class="nav-label">Personal</div>
+<a href="{% url 'staff:apply_leave' %}" class="nav-item">
+    <i class="fas fa-calendar-minus"></i> Apply Leave
+</a>
+<a href="{% url 'staff:view_salary' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Salary Slips
+</a>
+{% endblock %}
+
+
+
+{% block dashboard_content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner animate-in">
+    <div class="welcome-text">
+        <h2>Welcome, {{ staff.user.first_name }}! 👋</h2>
+        <p>{{ staff.designation }} · {{ staff.department }} Department — Here's your teaching overview for today.</p>
+    </div>
+    <div class="welcome-illustration">
+        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Whiteboard -->
+            <rect x="30" y="30" width="90" height="60" rx="4" fill="#E8E6FF" stroke="#C4B5FD" stroke-width="2" />
+            <line x1="45" y1="50" x2="100" y2="50" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" />
+            <line x1="45" y1="60" x2="85" y2="60" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" />
+            <line x1="45" y1="70" x2="95" y2="70" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" />
+            <!-- Whiteboard stand -->
+            <rect x="73" y="90" width="4" height="20" fill="#C4B5FD" />
+            <rect x="60" y="108" width="30" height="4" rx="2" fill="#DDD6FE" />
+            <!-- Teacher figure -->
+            <circle cx="150" cy="55" r="14" fill="#FDE68A" />
+            <rect x="143" y="68" width="14" height="16" rx="4" fill="#FDE68A" />
+            <path d="M135 112 Q150 78 165 112" fill="#6C63FF" />
+            <!-- Pointer stick -->
+            <line x1="135" y1="85" x2="115" y2="62" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" />
+            <!-- Decorative -->
+            <circle cx="170" cy="35" r="3" fill="#FDE68A" opacity="0.7" />
+            <circle cx="25" cy="110" r="4" fill="#34D399" opacity="0.5" />
+            <polygon points="180,100 175,110 185,110" fill="#FCA5A5" opacity="0.6" />
+        </svg>
+    </div>
+</div>
+
+<!-- Quick Action Stats -->
+<div class="stats-section animate-in animate-delay-1">
+    <div class="stats-section-title">Quick Actions</div>
+    <div class="stats-grid">
+        <a href="{% url 'staff:assign_homework' %}" class="stat-card gradient-yellow" style="text-decoration:none;">
+            <div class="stat-icon yellow">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" style="font-size:16px;">Assign</div>
+                <div class="stat-label">Homework</div>
+            </div>
+        </a>
+        <a href="{% url 'staff:timetable' %}" class="stat-card gradient-purple" style="text-decoration:none;">
+            <div class="stat-icon purple">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" style="font-size:16px;">View</div>
+                <div class="stat-label">My Timetable</div>
+            </div>
+        </a>
+        <a href="{% url 'staff:apply_leave' %}" class="stat-card gradient-pink" style="text-decoration:none;">
+            <div class="stat-icon pink">
+                <i class="fas fa-calendar-minus"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" style="font-size:16px;">Apply</div>
+                <div class="stat-label">Leave Request</div>
+            </div>
+        </a>
+        <a href="{% url 'staff:view_salary' %}" class="stat-card gradient-green" style="text-decoration:none;">
+            <div class="stat-icon green">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" style="font-size:16px;">View</div>
+                <div class="stat-label">Salary Slips</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="content-grid animate-in animate-delay-2">
+
+    <!-- LEFT: Classes + Subjects & Marks -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- My Classes -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-chalkboard" style="color: var(--primary); margin-right: 8px;"></i>My Classes</h3>
+            </div>
+            <div class="content-card-body">
+                {% if classes %}
+                {% for class in classes %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ class.name }} - {{ class.section }}</h4>
+                        <p>Class Teacher</p>
+                    </div>
+                    <div class="action-btn-row">
+                        <a href="{% url 'staff:take_attendance' class.id %}" class="action-btn" title="Take Attendance">
+                            <i class="fas fa-clipboard-check"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <p>No classes assigned as Class Teacher.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Subjects & Marks -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-pen-fancy" style="color: var(--accent-yellow); margin-right: 8px;"></i>Subjects &
+                    Marks</h3>
+                <a href="{% url 'staff:select_exam' %}" class="header-action">All Exams →</a>
+            </div>
+            <div class="content-card-body">
+                {% if subjects %}
+                {% for subject in subjects %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ subject.name }} ({{ subject.code }})</h4>
+                        <p>
+                            {% for exam in subject.exams.all %}
+                            {{ exam.name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                            No exams scheduled
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="action-btn-row">
+                        {% for exam in subject.exams.all %}
+                        <a href="{% url 'staff:enter_marks' exam.id %}" class="action-btn"
+                            title="Update: {{ exam.name }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-book-open"></i></div>
+                    <p>No subjects assigned.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Announcements + Leave History -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Announcements -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bullhorn" style="color: var(--accent-pink); margin-right: 8px;"></i>Staff
+                    Announcements</h3>
+            </div>
+            <div class="content-card-body">
+                {% if announcements %}
+                {% for announcement in announcements %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ announcement.title }}</h4>
+                        <p>{{ announcement.content|truncatewords:12 }}</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-blue">{{ announcement.date_posted|date:"M d" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-bell-slash"></i></div>
+                    <p>No announcements.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Leave History -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-calendar-minus" style="color: var(--accent-green); margin-right: 8px;"></i>Leave
+                    History</h3>
+            </div>
+            <div class="content-card-body">
+                {% if recent_leaves %}
+                {% for leave in recent_leaves %}
+                <div class="list-item">
+                    <div class="list-item-icon"
+                        style="background: {% if leave.status == 'APPROVED' %}#D1FAE5{% elif leave.status == 'REJECTED' %}#FEE2E2{% else %}#FEF3C7{% endif %}; color: {% if leave.status == 'APPROVED' %}#059669{% elif leave.status == 'REJECTED' %}#DC2626{% else %}#D97706{% endif %};">
+                        <i
+                            class="fas {% if leave.status == 'APPROVED' %}fa-check{% elif leave.status == 'REJECTED' %}fa-times{% else %}fa-hourglass-half{% endif %}"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ leave.start_date }} to {{ leave.end_date }}</h4>
+                        <p>{{ leave.reason|truncatewords:5 }}</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span
+                            class="badge {% if leave.status == 'APPROVED' %}badge-green{% elif leave.status == 'REJECTED' %}badge-pink{% else %}badge-yellow{% endif %}">{{
+                            leave.get_status_display }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-calendar"></i></div>
+                    <p>No leave history.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

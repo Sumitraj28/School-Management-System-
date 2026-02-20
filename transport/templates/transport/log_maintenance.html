@@ -1,0 +1,101 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Log Maintenance — SMS{% endblock %}
+
+{% block header_title %}Log Maintenance{% endblock %}
+{% block user_role %}{% if is_driver %}Driver{% else %}Transport Manager{% endif %}{% endblock %}
+
+{% block sidebar_nav %}
+{% if is_driver %}
+<a href="{% url 'transport:driver_dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'transport:log_fuel' %}" class="nav-item">
+    <i class="fas fa-gas-pump"></i> Log Fuel
+</a>
+<a href="{% url 'transport:log_maintenance' %}" class="nav-item active">
+    <i class="fas fa-wrench"></i> Log Maintenance
+</a>
+{% else %}
+<a href="{% url 'transport:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'transport:log_fuel' %}" class="nav-item">
+    <i class="fas fa-gas-pump"></i> Log Fuel
+</a>
+<a href="{% url 'transport:log_maintenance' %}" class="nav-item active">
+    <i class="fas fa-wrench"></i> Log Maintenance
+</a>
+{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in" style="max-width: 560px;">
+    <div class="content-card-header">
+        <h3><i class="fas fa-wrench" style="color: #059669; margin-right: 8px;"></i>Log Maintenance / Service</h3>
+    </div>
+    <div class="content-card-body">
+        <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            {% csrf_token %}
+
+            <div>
+                <label class="form-label">Vehicle</label>
+                {% if is_driver %}
+                {% if driver_vehicle %}
+                <div
+                    style="padding: 10px 14px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-weight: 500;">
+                    {{ driver_vehicle.model }} ({{ driver_vehicle.registration_number }})
+                </div>
+                {% else %}
+                <div
+                    style="padding: 10px 14px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px; color: #DC2626; font-weight: 500;">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i> No Vehicle Assigned! Contact
+                    admin.
+                </div>
+                {% endif %}
+                {% else %}
+                <select name="vehicle" class="form-input" required>
+                    <option value="">Select Vehicle</option>
+                    {% for vehicle in vehicles %}
+                    <option value="{{ vehicle.id }}">{{ vehicle.model }} ({{ vehicle.registration_number }})</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+            </div>
+
+            <div>
+                <label class="form-label">Service Date</label>
+                <input type="date" name="date" required class="form-input">
+            </div>
+
+            <div>
+                <label class="form-label">Issue / Service Description</label>
+                <textarea name="description" rows="3" required class="form-input"
+                    placeholder="Describe the maintenance issue..." style="resize: vertical;"></textarea>
+            </div>
+
+            <div>
+                <label class="form-label">Total Cost</label>
+                <input type="number" step="0.01" name="cost" required class="form-input" placeholder="e.g. 5000">
+            </div>
+
+            <div>
+                <label class="form-label">Serviced By (Mechanic/Workshop)</label>
+                <input type="text" name="serviced_by" required class="form-input" placeholder="e.g. ABC Auto Workshop">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px;">
+                <a href="{% if is_driver %}{% url 'transport:driver_dashboard' %}{% else %}{% url 'transport:dashboard' %}{% endif %}"
+                    style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500;">
+                    <i class="fas fa-arrow-left" style="margin-right: 4px;"></i> Cancel
+                </a>
+                <button type="submit" class="sidebar-create-btn"
+                    style="display: inline-flex; gap: 8px; background: linear-gradient(135deg, #059669, #34D399);{% if is_driver and not driver_vehicle %} opacity:0.5; cursor: not-allowed;{% endif %}"
+                    {% if is_driver and not driver_vehicle %}disabled{% endif %}>
+                    <i class="fas fa-save"></i> Submit Log
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

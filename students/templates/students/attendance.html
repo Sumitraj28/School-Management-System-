@@ -1,0 +1,72 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Attendance Record — SMS{% endblock %}
+
+{% block header_title %}Attendance{% endblock %}
+{% block user_role %}Student{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'students:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'students:attendance' %}" class="nav-item active">
+    <i class="fas fa-calendar-check"></i> Attendance
+</a>
+<a href="{% url 'students:grades' %}" class="nav-item">
+    <i class="fas fa-award"></i> Grades
+</a>
+<a href="{% url 'students:fees' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Fees
+</a>
+<a href="{% url 'students:homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Homework
+</a>
+<a href="{% url 'students:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> Timetable
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in">
+    <div class="content-card-header">
+        <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 8px;"></i>Attendance Record
+        </h3>
+    </div>
+    <div class="content-card-body" style="padding: 0;">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>
+                            <span
+                                class="badge {% if record.status == 'PRESENT' %}badge-green{% elif record.status == 'ABSENT' %}badge-pink{% elif record.status == 'LATE' %}badge-yellow{% else %}badge-blue{% endif %}">
+                                {{ record.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="color: var(--text-secondary);">{{ record.remarks }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 32px; color: var(--text-secondary);">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-calendar"></i></div>
+                                <p>No attendance records found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

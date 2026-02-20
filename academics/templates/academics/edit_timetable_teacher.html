@@ -1,0 +1,266 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Edit Timetable — {{ teacher.user.get_full_name }} — SMS{% endblock %}
+
+{% block header_title %}Edit Timetable{% endblock %}
+{% block user_role %}Admin{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .teacher-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+        border-radius: 14px;
+        border: 1px solid #A7F3D0;
+    }
+
+    .teacher-header-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #34D399, #10B981);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .teacher-header-info h2 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0 0 4px 0;
+    }
+
+    .teacher-header-info p {
+        color: var(--text-secondary);
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        transition: 0.2s;
+    }
+
+    .back-link:hover {
+        color: var(--primary-dark, #4F46E5);
+    }
+
+    .day-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .day-MONDAY {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .day-TUESDAY {
+        background: #E0E7FF;
+        color: #3730A3;
+    }
+
+    .day-WEDNESDAY {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .day-THURSDAY {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .day-FRIDAY {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .day-SATURDAY {
+        background: #EDE9FE;
+        color: #5B21B6;
+    }
+
+    .day-SUNDAY {
+        background: #FCE7F3;
+        color: #9D174D;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<!-- Back Link -->
+<a href="{% url 'academics:manage_timetable' %}#teacher" class="back-link">
+    <i class="fas fa-arrow-left"></i> Back to Manage Timetables
+</a>
+
+<!-- Teacher Info Header -->
+<div class="teacher-header">
+    <div class="teacher-header-avatar">
+        {{ teacher.user.first_name|make_list|first|upper }}{{ teacher.user.last_name|make_list|first|upper }}
+    </div>
+    <div class="teacher-header-info">
+        <h2>{{ teacher.user.get_full_name }}</h2>
+        <p><i class="fas fa-id-badge" style="margin-right: 4px;"></i>{{ teacher.designation|default:"Teacher" }} &bull;
+            {{ teacher.employee_id|default:"No ID" }} &bull; {{ teacher.user.email }}</p>
+    </div>
+</div>
+
+<!-- Add New Slot Form -->
+<div class="content-card animate-in" style="margin-bottom: 24px;">
+    <div class="content-card-header">
+        <h3><i class="fas fa-plus-circle" style="color: var(--accent-green, #34D399); margin-right: 8px;"></i>Add New
+            Slot for {{ teacher.user.get_full_name }}</h3>
+    </div>
+    <div class="content-card-body">
+        <form method="post" style="display: flex; flex-direction: column; gap: 16px;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                <div>
+                    <label class="form-label">Class</label>
+                    <select name="class_group" required class="form-input">
+                        <option value="" disabled selected>Select Class</option>
+                        {% for cls in classes %}
+                        <option value="{{ cls.id }}">{{ cls.name }} - {{ cls.section }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Day</label>
+                    <select name="day" required class="form-input">
+                        <option value="" disabled selected>Select Day</option>
+                        {% for value, label in days %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Subject</label>
+                    <select name="subject" required class="form-input">
+                        <option value="" disabled selected>Select Subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Start Time</label>
+                    <input type="time" name="start_time" required class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">End Time</label>
+                    <input type="time" name="end_time" required class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">Room (Optional)</label>
+                    <input type="text" name="room_number" placeholder="e.g. 101" class="form-input">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="sidebar-create-btn"
+                    style="display: inline-flex; gap: 8px; background: linear-gradient(135deg, #34D399, #10B981); padding: 10px 24px;">
+                    <i class="fas fa-plus"></i> Add Slot
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Current Schedule -->
+<div class="content-card animate-in animate-delay-1">
+    <div class="content-card-header">
+        <h3><i class="fas fa-table" style="color: var(--primary); margin-right: 8px;"></i>Current Schedule
+            <span style="font-size: 13px; font-weight: 400; color: var(--text-secondary); margin-left: 8px;">
+                — {{ timetable|length }} slot{{ timetable|length|pluralize }}
+            </span>
+        </h3>
+    </div>
+    <div class="content-card-body" style="padding: 0;">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Room</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in timetable %}
+                    <tr>
+                        <td>
+                            <span class="day-badge day-{{ entry.day }}">{{ entry.get_day_display }}</span>
+                        </td>
+                        <td style="font-weight: 500;">{{ entry.start_time|date:"H:i" }} - {{ entry.end_time|date:"H:i"
+                            }}</td>
+                        <td style="font-weight: 600;">{{ entry.class_group.name }} - {{ entry.class_group.section }}
+                        </td>
+                        <td style="font-weight: 600; color: var(--primary);">{{ entry.subject.name }}</td>
+                        <td style="color: var(--text-secondary);">{{ entry.room_number|default:"-" }}</td>
+                        <td style="text-align: right;">
+                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this slot?');"
+                                style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="entry_id" value="{{ entry.id }}">
+                                <button type="submit"
+                                    style="background: none; border: none; color: #DC2626; cursor: pointer; font-weight: 600; font-size: 13px; padding: 4px 10px; border-radius: 6px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#FEF2F2';"
+                                    onmouseout="this.style.background='none';">
+                                    <i class="fas fa-trash-alt" style="margin-right: 4px;"></i>Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-calendar-plus"></i></div>
+                                <p>No timetable entries for this teacher. Add a slot above.</p>
+                                <p style="font-size: 12px; margin-top: 4px;">Entries added here will appear on the
+                                    teacher's dashboard.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

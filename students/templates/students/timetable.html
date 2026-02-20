@@ -1,0 +1,148 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}My Timetable — SMS{% endblock %}
+
+{% block header_title %}Timetable{% endblock %}
+{% block user_role %}Student{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'students:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'students:attendance' %}" class="nav-item">
+    <i class="fas fa-calendar-check"></i> Attendance
+</a>
+<a href="{% url 'students:grades' %}" class="nav-item">
+    <i class="fas fa-award"></i> Grades
+</a>
+<a href="{% url 'students:fees' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Fees
+</a>
+<a href="{% url 'students:homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Homework
+</a>
+<a href="{% url 'students:timetable' %}" class="nav-item active">
+    <i class="fas fa-clock"></i> Timetable
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Timetable Summary Cards -->
+<div class="stats-section animate-in">
+    <div class="stats-section-title">Timetable Summary</div>
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="stat-card gradient-purple">
+            <div class="stat-icon purple"><i class="fas fa-calendar-alt"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">{{ total_classes }}</div>
+                <div class="stat-label">Total Classes</div>
+            </div>
+        </div>
+        <div class="stat-card gradient-green">
+            <div class="stat-icon green"><i class="fas fa-calendar-day"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">{{ todays_classes }}</div>
+                <div class="stat-label">Today's Classes</div>
+            </div>
+        </div>
+        <div class="stat-card gradient-pink">
+            <div class="stat-icon pink"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">{{ total_subjects }}</div>
+                <div class="stat-label">Total Subjects</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timetable-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    .timetable-box {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        padding: 24px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .timetable-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary);
+    }
+
+    .timetable-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--primary);
+        border-radius: 4px 0 0 4px;
+    }
+</style>
+
+<div class="timetable-grid animate-in animate-delay-1">
+    {% for entry in timetable %}
+    <div class="timetable-box">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <span class="badge badge-purple" style="font-size: 12px; padding: 6px 14px;">
+                {{ entry.get_day_display }}
+            </span>
+            <span
+                style="font-size: 13px; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: 6px; background: var(--bg-light); padding: 6px 12px; border-radius: 8px;">
+                <i class="far fa-clock" style="color: var(--primary);"></i>
+                {{ entry.start_time|time:"h:i A" }} - {{ entry.end_time|time:"h:i A" }}
+            </span>
+        </div>
+
+        <h4 style="font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px;">
+            {{ entry.subject.name }}
+        </h4>
+
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div
+                    style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 12px;">
+                    {{ entry.teacher.user.first_name|first|default:"T" }}
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <span
+                        style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Teacher</span>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--text-dark);">
+                        {{ entry.teacher.user.get_full_name|default:"Not Assigned" }}
+                    </span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <span
+                    style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Room</span>
+                <span style="font-size: 14px; font-weight: 800; color: var(--text-dark);">
+                    {{ entry.room_number|default:"TBA" }}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div
+        style="grid-column: 1 / -1; padding: 40px; text-align: center; background: white; border-radius: 16px; border: 1px dashed var(--border-color);">
+        <div style="font-size: 40px; color: var(--text-secondary); margin-bottom: 16px; opacity: 0.5;"><i
+                class="fas fa-calendar-times"></i></div>
+        <p style="font-size: 16px; font-weight: 600; color: var(--text-dark);">No classes scheduled yet.</p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Your timetable boxes will appear
+            here.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

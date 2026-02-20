@@ -1,0 +1,906 @@
+/* ===== SMS Admin – Light Portal Theme (matches Admin Dashboard) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    /* Brand Palette - matching admin portal */
+    --brand-primary: #6C63FF;
+    --brand-primary-dark: #4F46E5;
+    --brand-primary-light: #E8E6FF;
+    --brand-primary-bg: #EDE9FE;
+    --brand-accent-purple: #8B5CF6;
+    --brand-secondary: #64748b;
+    --brand-success: #34D399;
+    --brand-warning: #F5C542;
+    --brand-danger: #FF6B8A;
+
+    /* Backgrounds - light & airy */
+    --body-bg: #F4F3FF;
+    --sidebar-bg: #FAFAFA;
+    --card-bg: #ffffff;
+
+    /* Text */
+    --text-dark: #1E1E2D;
+    --text-secondary: #6B7280;
+
+    /* UI */
+    --border-color: #E5E7EB;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --radius: 16px;
+}
+
+/* ===== Base ===== */
+body {
+    font-family: 'Outfit', sans-serif !important;
+    background-color: var(--body-bg) !important;
+    color: var(--text-dark) !important;
+}
+
+a {
+    color: var(--brand-primary) !important;
+}
+
+a:hover {
+    color: var(--brand-primary-dark) !important;
+}
+
+/* ===== Navbar ===== */
+.main-header.navbar {
+    background: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    min-height: 60px !important;
+    padding: 0 24px !important;
+}
+
+.main-header .navbar-nav .nav-link {
+    color: var(--text-dark) !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+}
+
+.main-header .navbar-nav .nav-link:hover {
+    color: var(--brand-primary) !important;
+}
+
+/* Brand in sidebar */
+.main-sidebar .brand-link {
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 20px 16px !important;
+    background: var(--sidebar-bg) !important;
+}
+
+.brand-link .brand-text {
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    color: var(--text-dark) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.brand-link .brand-image {
+    max-height: 36px !important;
+    margin-left: 4px !important;
+    margin-right: 8px !important;
+}
+
+/* ===== Sidebar – Light Theme ===== */
+.main-sidebar {
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+.sidebar {
+    padding: 8px 12px !important;
+}
+
+/* Sidebar section labels */
+.nav-sidebar .nav-header {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    padding: 16px 12px 8px !important;
+}
+
+/* Nav items */
+.nav-sidebar>.nav-item>.nav-link {
+    border-radius: 10px !important;
+    margin: 2px 0 !important;
+    padding: 11px 16px !important;
+    color: var(--text-secondary) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+.nav-sidebar>.nav-item>.nav-link:hover {
+    background-color: var(--brand-primary-light) !important;
+    background-image: none !important;
+    color: var(--brand-primary) !important;
+}
+
+/* Active – override AdminLTE's solid purple with subtle light purple */
+.nav-sidebar>.nav-item>.nav-link.active,
+.nav-sidebar>.nav-item.menu-open>.nav-link,
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active,
+.sidebar-light-primary .nav-sidebar .nav-link.active,
+[class*="sidebar-light"] .nav-sidebar>.nav-item>.nav-link.active,
+body .main-sidebar .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: var(--brand-primary-light) !important;
+    background-image: none !important;
+    background: var(--brand-primary-light) !important;
+    color: var(--brand-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Active white text override – force dark/purple text */
+.nav-sidebar>.nav-item>.nav-link.active p,
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active p,
+body .main-sidebar .nav-sidebar>.nav-item>.nav-link.active p {
+    color: var(--brand-primary) !important;
+}
+
+.nav-sidebar>.nav-item>.nav-link.active i,
+.nav-sidebar>.nav-item>.nav-link.active .nav-icon,
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active i,
+body .main-sidebar .nav-sidebar>.nav-item>.nav-link.active i {
+    color: var(--brand-primary) !important;
+}
+
+/* Active indicator bar */
+.nav-sidebar>.nav-item>.nav-link.active::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 3px !important;
+    height: 20px !important;
+    background: var(--brand-primary) !important;
+    border-radius: 0 4px 4px 0 !important;
+}
+
+/* Sidebar nav icons */
+.nav-sidebar .nav-link i,
+.nav-sidebar .nav-link .nav-icon {
+    color: inherit !important;
+    font-size: 16px !important;
+    width: 20px !important;
+    text-align: center !important;
+    margin-right: 12px !important;
+}
+
+/* Sidebar sub-navigation */
+.nav-treeview {
+    padding-left: 8px !important;
+}
+
+.nav-treeview>.nav-item>.nav-link {
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    color: var(--text-secondary) !important;
+    font-size: 13px !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+.nav-treeview>.nav-item>.nav-link:hover,
+.nav-treeview>.nav-item>.nav-link.active {
+    color: var(--brand-primary) !important;
+    background-color: var(--brand-primary-light) !important;
+    background-image: none !important;
+}
+
+/* User Panel in sidebar */
+.user-panel {
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 16px !important;
+}
+
+.user-panel .info a {
+    color: var(--text-dark) !important;
+    font-weight: 600 !important;
+}
+
+/* ===== Content Area ===== */
+.content-wrapper {
+    background: var(--body-bg) !important;
+}
+
+.content-header {
+    padding: 20px 28px 8px !important;
+}
+
+.content-header h1 {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: var(--text-dark) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.content {
+    padding: 0 28px 28px !important;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.breadcrumb-item a {
+    color: var(--brand-primary) !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-secondary) !important;
+    font-size: 13px !important;
+}
+
+/* ===== Cards – Clean & Rounded ===== */
+.card {
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    background: var(--card-bg) !important;
+    margin-bottom: 20px !important;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md) !important;
+    transition: box-shadow 0.3s ease !important;
+}
+
+/* Card Headers – clean with bottom border only (NO gradient) */
+.card-header {
+    background: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 18px 22px !important;
+    font-weight: 600 !important;
+    color: var(--text-dark) !important;
+    font-size: 16px !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.card-header h3,
+.card-header .card-title,
+.card-header h5,
+.card-header h5.m-0 {
+    color: var(--text-dark) !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.card-body {
+    padding: 0 !important;
+}
+
+/* ===== Module Tables ===== */
+table {
+    border-collapse: collapse !important;
+}
+
+table thead th {
+    background: var(--body-bg) !important;
+    color: var(--text-secondary) !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 12px 22px !important;
+    border: none !important;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #F3F4F6 !important;
+    transition: background 0.2s !important;
+}
+
+table tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+table tbody tr:hover {
+    background: #FAFAFA !important;
+}
+
+table tbody td {
+    padding: 14px 22px !important;
+    color: var(--text-dark) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border: none !important;
+    vertical-align: middle !important;
+}
+
+table tbody td a {
+    color: var(--brand-primary) !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+}
+
+table tbody td a:hover {
+    color: var(--brand-primary-dark) !important;
+    text-decoration: underline !important;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    border-radius: 10px !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 8px 18px !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    letter-spacing: 0.01em !important;
+}
+
+.btn-primary,
+.btn-info {
+    background: var(--brand-primary) !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover,
+.btn-info:hover {
+    background: var(--brand-primary-dark) !important;
+    transform: translateY(-1px) !important;
+}
+
+.btn-success {
+    background: var(--brand-success) !important;
+    color: #fff !important;
+}
+
+.btn-danger {
+    background: var(--brand-danger) !important;
+    color: #fff !important;
+}
+
+.btn-outline-secondary {
+    border: 1px solid var(--border-color) !important;
+    background: var(--card-bg) !important;
+    color: var(--text-secondary) !important;
+}
+
+.btn-outline-secondary:hover {
+    border-color: var(--brand-primary) !important;
+    color: var(--brand-primary) !important;
+    background: var(--brand-primary-light) !important;
+}
+
+/* Add/Change links on dashboard */
+a.addlink,
+a.changelink {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6px 16px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.25s !important;
+    gap: 5px !important;
+}
+
+a.addlink {
+    background: var(--brand-success) !important;
+    color: #fff !important;
+}
+
+a.addlink:hover {
+    background: #059669 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(52, 211, 153, 0.3) !important;
+}
+
+a.changelink {
+    background: var(--brand-primary) !important;
+    color: #fff !important;
+}
+
+a.changelink:hover {
+    background: var(--brand-primary-dark) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(108, 99, 255, 0.3) !important;
+}
+
+/* ===== Recent Actions Panel ===== */
+.col-lg-3 .card,
+.col-md-4 .card,
+#recent-actions-module {
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border-color) !important;
+    background: var(--card-bg) !important;
+}
+
+.col-lg-3 .card .card-header,
+.col-md-4 .card .card-header,
+#recent-actions-module .card-header {
+    background: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    font-weight: 600 !important;
+    color: var(--text-dark) !important;
+}
+
+.timeline-item {
+    padding: 14px 0 !important;
+    border-bottom: 1px solid #F3F4F6 !important;
+}
+
+.timeline-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Action log items */
+.actionlist li,
+ul.actionlist li {
+    padding: 14px 22px !important;
+    border-bottom: 1px solid #F3F4F6 !important;
+    list-style: none !important;
+    font-size: 13px !important;
+    color: var(--text-secondary) !important;
+}
+
+.actionlist li:last-child {
+    border-bottom: none !important;
+}
+
+.actionlist a {
+    color: var(--brand-primary) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+/* ===== Login Page ===== */
+.login-page {
+    background: var(--body-bg) !important;
+}
+
+.login-box,
+.login-card-body,
+.card-body.login-card-body {
+    border-radius: var(--radius) !important;
+}
+
+.login-card-body {
+    padding: 28px !important;
+}
+
+.login-logo a {
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+    font-size: 24px !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.btn-primary.btn-block {
+    background: var(--brand-primary) !important;
+    border-radius: 10px !important;
+    padding: 12px !important;
+    font-weight: 600 !important;
+}
+
+/* ===== Forms ===== */
+.form-control,
+.select2-container--default .select2-selection--single {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    padding: 10px 16px !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 14px !important;
+    color: var(--text-dark) !important;
+    transition: border-color 0.2s !important;
+}
+
+.form-control:focus {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12) !important;
+}
+
+label {
+    font-weight: 500 !important;
+    color: var(--text-dark) !important;
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+}
+
+/* ===== Pagination ===== */
+.pagination .page-item .page-link {
+    border-radius: 8px !important;
+    margin: 0 3px !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+    color: #fff !important;
+}
+
+/* ===== Footer ===== */
+.main-footer {
+    background: var(--card-bg) !important;
+    border-top: 1px solid var(--border-color) !important;
+    font-size: 13px !important;
+    color: var(--text-secondary) !important;
+    padding: 14px 28px !important;
+}
+
+/* ===== Help Text ===== */
+.help-block,
+.helptext {
+    font-size: 12px !important;
+    color: var(--text-secondary) !important;
+    margin-top: 4px !important;
+}
+
+/* ===== Alert / Messages ===== */
+.alert {
+    border-radius: 12px !important;
+    border: none !important;
+    font-size: 14px !important;
+    padding: 14px 20px !important;
+}
+
+.alert-success {
+    background: #D1FAE5 !important;
+    color: #065F46 !important;
+}
+
+.alert-info {
+    background: var(--brand-primary-light) !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+.alert-warning {
+    background: #FEF3C7 !important;
+    color: #92400E !important;
+}
+
+.alert-danger {
+    background: #FEE2E2 !important;
+    color: #991B1B !important;
+}
+
+/* ===== Calendar / Date picker ===== */
+.ui-datepicker {
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-lg) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* ===== Modals ===== */
+.modal-content {
+    border-radius: 16px !important;
+    border: none !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 18px 22px !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color) !important;
+    padding: 14px 22px !important;
+}
+
+/* ===== Dropdown ===== */
+.dropdown-menu {
+    border-radius: 12px !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: 8px !important;
+}
+
+.dropdown-item {
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.15s !important;
+}
+
+.dropdown-item:hover {
+    background: var(--brand-primary-light) !important;
+    color: var(--brand-primary) !important;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+/* ===== Action Bar Alignment ===== */
+#changelist-form .actions,
+#changelist .actions,
+form .actions,
+div.actions,
+.actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    padding: 12px 22px !important;
+    background: var(--brand-primary-light) !important;
+    border-radius: 12px !important;
+    margin-bottom: 16px !important;
+}
+
+#changelist-form .actions label,
+#changelist .actions label,
+form .actions label,
+div.actions label,
+.actions label {
+    display: contents !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--text-dark) !important;
+}
+
+#changelist-form .actions select,
+#changelist .actions select,
+form .actions select,
+div.actions select,
+.actions select {
+    flex: 1 !important;
+    height: 38px !important;
+    min-width: 0 !important;
+    max-width: 300px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    font-family: 'Outfit', sans-serif !important;
+    color: var(--text-dark) !important;
+    background: var(--card-bg) !important;
+}
+
+.actions .button,
+.actions button[type="submit"],
+div.actions .button,
+div.actions button[type="submit"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 38px !important;
+    padding: 0 20px !important;
+    border-radius: 10px !important;
+    background: var(--brand-primary) !important;
+    color: #fff !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.actions .button:hover,
+.actions button[type="submit"]:hover,
+div.actions .button:hover,
+div.actions button[type="submit"]:hover {
+    background: var(--brand-primary-dark) !important;
+    transform: translateY(-1px) !important;
+}
+
+.actions .action-counter,
+div.actions .action-counter,
+.actions span.action-counter,
+div.actions span.action-counter {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    font-size: 13px !important;
+    color: var(--text-secondary) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+/* Hidden select-across input */
+.actions input.select-across,
+div.actions input.select-across {
+    display: none !important;
+}
+
+/* ===== Search Bar Alignment ===== */
+#toolbar #changelist-search,
+#toolbar form#changelist-search {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+#toolbar #changelist-search>div,
+#toolbar form#changelist-search>div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+#toolbar #changelist-search label,
+#toolbar form#changelist-search label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 38px !important;
+    flex-shrink: 0 !important;
+}
+
+#toolbar #changelist-search label img {
+    height: 18px !important;
+    width: 18px !important;
+    opacity: 0.5 !important;
+}
+
+#toolbar #changelist-search input[type="text"],
+#toolbar form#changelist-search input[type="text"],
+#toolbar #searchbar {
+    flex: 1 !important;
+    min-width: 200px !important;
+    max-width: 400px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 6px 14px !important;
+    font-size: 14px !important;
+    font-family: 'Outfit', sans-serif !important;
+    color: var(--text-dark) !important;
+}
+
+#toolbar #changelist-search input[type="submit"],
+#toolbar form#changelist-search input[type="submit"] {
+    height: 38px !important;
+    padding: 0 18px !important;
+    border-radius: 10px !important;
+    background: var(--brand-primary) !important;
+    color: #fff !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    flex-shrink: 0 !important;
+}
+
+#toolbar #changelist-search input[type="submit"]:hover,
+#toolbar form#changelist-search input[type="submit"]:hover {
+    background: var(--brand-primary-dark) !important;
+}
+
+/* ===== Change list page ===== */
+#changelist-filter {
+    border-radius: 12px !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 16px !important;
+}
+
+#changelist-filter h2 {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--text-dark) !important;
+    margin-bottom: 12px !important;
+}
+
+#changelist-filter li a {
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    display: block !important;
+}
+
+#changelist-filter li.selected a {
+    background: var(--brand-primary-light) !important;
+    color: var(--brand-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* ===== Submit Row ===== */
+.submit-row {
+    background: var(--card-bg) !important;
+    border-top: 1px solid var(--border-color) !important;
+    padding: 14px 22px !important;
+    border-radius: 0 0 var(--radius) var(--radius) !important;
+}
+
+.submit-row input[type="submit"],
+.submit-row button {
+    border-radius: 10px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* ===== Misc Spacing/Polish ===== */
+.content-wrapper>.content>.container-fluid>.row {
+    gap: 0 !important;
+}
+
+/* Object tools (add button on change list) */
+.object-tools {
+    margin: 0 0 16px !important;
+}
+
+.object-tools li a {
+    border-radius: 10px !important;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .content {
+        padding: 0 16px 16px !important;
+    }
+
+    .content-header {
+        padding: 16px 16px 8px !important;
+    }
+
+    .card {
+        border-radius: 12px !important;
+    }
+}
+
+/* ===== Animations ===== */
+.card {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

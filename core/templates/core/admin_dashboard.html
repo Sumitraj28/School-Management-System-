@@ -1,0 +1,247 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Admin Dashboard — SMS{% endblock %}
+
+{% block header_title %}Dashboard{% endblock %}
+{% block user_role %}Administrator{% endblock %}
+
+{% block sidebar_create_btn %}
+<a href="/admin/students/student/add/" class="sidebar-create-btn">
+    <span>Add New</span>
+    <span class="btn-plus"><i class="fas fa-plus"></i></span>
+</a>
+{% endblock %}
+
+
+{% block dashboard_content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner animate-in">
+    <div class="welcome-text">
+        <h2>Hi, {{ user.first_name|default:user.username }}! 👋</h2>
+        <p>Ready to manage your school? Here's today's overview of all operations at a glance.</p>
+    </div>
+    <div class="welcome-illustration">
+        <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Desk -->
+            <rect x="40" y="100" width="120" height="8" rx="4" fill="#DDD6FE" />
+            <rect x="55" y="108" width="8" height="40" rx="2" fill="#C4B5FD" />
+            <rect x="137" y="108" width="8" height="40" rx="2" fill="#C4B5FD" />
+            <!-- Laptop -->
+            <rect x="65" y="72" width="55" height="30" rx="4" fill="#6C63FF" />
+            <rect x="69" y="76" width="47" height="22" rx="2" fill="#A5B4FC" />
+            <rect x="55" y="100" width="75" height="4" rx="2" fill="#8B5CF6" />
+            <!-- Person -->
+            <circle cx="135" cy="55" r="14" fill="#FDE68A" />
+            <path d="M120 100 Q135 75 150 100" fill="#6C63FF" />
+            <rect x="128" y="68" width="14" height="18" rx="4" fill="#FDE68A" />
+            <!-- Coffee cup -->
+            <rect x="150" y="88" width="12" height="14" rx="3" fill="#FCA5A5" />
+            <path d="M162 92 Q168 92 168 96 Q168 100 162 100" stroke="#FCA5A5" stroke-width="2" fill="none" />
+            <!-- Decorative circles -->
+            <circle cx="80" cy="45" r="4" fill="#FDE68A" opacity="0.6" />
+            <circle cx="95" cy="35" r="3" fill="#A78BFA" opacity="0.5" />
+            <circle cx="110" cy="50" r="2" fill="#6C63FF" opacity="0.4" />
+            <!-- Plant -->
+            <rect x="35" y="85" width="6" height="17" rx="3" fill="#86EFAC" />
+            <circle cx="38" cy="80" r="8" fill="#34D399" />
+            <circle cx="32" cy="85" r="5" fill="#6EE7B7" />
+        </svg>
+    </div>
+</div>
+
+<!-- Overview Stats -->
+<div class="stats-section animate-in animate-delay-1">
+    <div class="stats-section-title">Overview</div>
+    <div class="stats-grid">
+        <a href="/admin/students/" class="stat-card gradient-yellow" style="text-decoration:none;">
+            <div class="stat-icon yellow">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{{ total_students }}</div>
+                <div class="stat-label">Students</div>
+            </div>
+        </a>
+        <a href="/admin/staff/" class="stat-card gradient-purple" style="text-decoration:none;">
+            <div class="stat-icon purple">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{{ total_staff }}</div>
+                <div class="stat-label">Staff Members</div>
+            </div>
+        </a>
+        <a href="/admin/finance/" class="stat-card gradient-pink" style="text-decoration:none;">
+            <div class="stat-icon pink">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">${{ total_revenue }}</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </a>
+        <a href="/admin/transport/" class="stat-card gradient-green" style="text-decoration:none;">
+            <div class="stat-icon green">
+                <i class="fas fa-bus"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">{{ total_vehicles }}</div>
+                <div class="stat-label">Vehicles</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="content-grid animate-in animate-delay-2">
+
+    <!-- LEFT: Quick Actions + Module Engagement -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Quick Actions -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bolt" style="color: var(--accent-yellow); margin-right: 8px;"></i>Operational
+                    Shortcuts</h3>
+            </div>
+            <div class="quick-action-grid">
+                <a href="/admin/students/student/add/" class="quick-action-item">
+                    <div class="qa-icon" style="background: #DBEAFE; color: #2563EB;">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <span>Add Student</span>
+                </a>
+                <a href="/admin/staff/staff/add/" class="quick-action-item">
+                    <div class="qa-icon" style="background: #D1FAE5; color: #059669;">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <span>Hire Staff</span>
+                </a>
+                <a href="/admin/finance/invoice/add/" class="quick-action-item">
+                    <div class="qa-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <span>Issue Invoice</span>
+                </a>
+                <a href="/admin/core/announcement/add/" class="quick-action-item">
+                    <div class="qa-icon" style="background: #FEF3C7; color: #D97706;">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <span>Broadcast</span>
+                </a>
+                <a href="{% url 'academics:manage_timetable' %}" class="quick-action-item">
+                    <div class="qa-icon" style="background: #FCE7F3; color: #DB2777;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span>Timetable</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Module Engagement Table -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-chart-bar" style="color: var(--primary); margin-right: 8px;"></i>Module Engagement
+                </h3>
+            </div>
+            <div class="content-card-body">
+                <!-- Academics -->
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #EDE9FE; color: #7C3AED;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Academics</h4>
+                        <p>{{ total_classes }} Classes, {{ total_subjects }} Subjects</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-green">ACTIVE</span>
+                    </div>
+                    <div class="action-btn-row">
+                        <a href="/admin/academics/" class="action-btn" title="Manage"><i
+                                class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Finance -->
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #FCE7F3; color: #DB2777;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Finance</h4>
+                        <p>{{ pending_invoices }} Pending Invoices</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-yellow">ACTION REQ</span>
+                    </div>
+                    <div class="action-btn-row">
+                        <a href="/admin/finance/" class="action-btn" title="Manage"><i
+                                class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Transport -->
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: #FEF3C7; color: #D97706;">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>Transport</h4>
+                        <p>{{ total_routes }} Active Routes</p>
+                    </div>
+                    <div class="list-item-meta">
+                        <span class="badge badge-green">OPTIMAL</span>
+                    </div>
+                    <div class="action-btn-row">
+                        <a href="/admin/transport/" class="action-btn" title="Manage"><i
+                                class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Announcements + Audit Logs -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Announcements -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h3><i class="fas fa-bullhorn" style="color: var(--accent-pink); margin-right: 8px;"></i>Recent
+                    Announcements</h3>
+                <a href="/admin/core/announcement/" class="header-action">View All →</a>
+            </div>
+            <div class="content-card-body">
+                {% if recent_announcements %}
+                {% for item in recent_announcements %}
+                <div class="list-item">
+                    <div class="list-item-icon" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="list-item-content">
+                        <h4>{{ item.title }}</h4>
+                        <p>To: {{ item.get_target_role_display }} · {{ item.date_posted|timesince }} ago</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-bell-slash"></i></div>
+                    <p>No recent broadcasts</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Audit Logs / System Card -->
+        <div class="info-card" style="background: linear-gradient(135deg, var(--primary), var(--accent-purple));">
+            <h4><i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Technical Logs</h4>
+            <p>Monitor system performance and user audit logs in real-time.</p>
+            <a href="/admin/core/activitylog/" class="info-card-btn" style="color: var(--primary);">Open Audit Logs</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

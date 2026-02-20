@@ -1,0 +1,73 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Academic Performance — SMS{% endblock %}
+
+{% block header_title %}Grades{% endblock %}
+{% block user_role %}Student{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'students:dashboard' %}" class="nav-item">
+    <i class="fas fa-th-large"></i> Dashboard
+</a>
+<a href="{% url 'students:attendance' %}" class="nav-item">
+    <i class="fas fa-calendar-check"></i> Attendance
+</a>
+<a href="{% url 'students:grades' %}" class="nav-item active">
+    <i class="fas fa-award"></i> Grades
+</a>
+<a href="{% url 'students:fees' %}" class="nav-item">
+    <i class="fas fa-wallet"></i> Fees
+</a>
+<a href="{% url 'students:homework' %}" class="nav-item">
+    <i class="fas fa-book-open"></i> Homework
+</a>
+<a href="{% url 'students:timetable' %}" class="nav-item">
+    <i class="fas fa-clock"></i> Timetable
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-card animate-in">
+    <div class="content-card-header">
+        <h3><i class="fas fa-award" style="color: var(--accent-yellow); margin-right: 8px;"></i>Academic Performance
+        </h3>
+    </div>
+    <div class="content-card-body" style="padding: 0;">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Subject</th>
+                        <th>Marks Obtained</th>
+                        <th>Total Marks</th>
+                        <th>Percentage</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ grade.exam.name }}</td>
+                        <td>{{ grade.exam.subject.name }}</td>
+                        <td style="color: var(--primary); font-weight: 700;">{{ grade.marks_obtained }}</td>
+                        <td>{{ grade.exam.total_marks }}</td>
+                        <td>{{ grade.marks_obtained|divisibleby:grade.exam.total_marks|floatformat:2 }}%</td>
+                        <td style="color: var(--text-secondary);">{{ grade.remarks }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 32px; color: var(--text-secondary);">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-graduation-cap"></i></div>
+                                <p>No grades recorded yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
