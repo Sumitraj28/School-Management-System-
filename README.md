@@ -82,11 +82,6 @@ python manage.py runserver
 Open 👉 http://127.0.0.1:8000/
 
 ---
-
-## 📸 Screenshots
-
-(Add screenshots here for better presentation)
-
 ---
 
 ## 📌 Future Improvements
@@ -110,3 +105,4 @@ Backend Developer | AI Enthusiast
 ## ⭐ Show Your Support
 
 If you like this project, give it a ⭐ on GitHub!
+
